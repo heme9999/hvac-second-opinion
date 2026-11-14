@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About HVAC Second Opinion (Peter) | Editorial Standards"
+  description="Meet Peter, the independent developer behind HVAC Second Opinion. Read our editorial standards, primary federal sources, and strict no-lead-gen policy."
+>
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Calculator</a> / <span>About</span>
+  </nav>
+
+  <article class="prose">
+    <h1>About HVAC Second Opinion</h1>
+    <p class="intro-lead">
+      Hi, I’m <strong>Peter</strong>, an independent software developer who built HVAC Second Opinion to give US homeowners a calm, transparent arithmetic check before signing off on a big repair or replacement quote.
+    </p>
+
+    <h2>Why I Built This Site</h2>
+    <p>
+      Most online HVAC calculators are lead-generation funnels in disguise: they ask for your ZIP code, email, and phone number, sell your contact details to three local sales teams, and spit out a vague price range without showing the math.
+    </p>
+    <p>
+      I wanted the exact opposite—a free, no-signup estimate sheet that runs 100% locally in your browser. Every check on the worksheet prints its exact formula in plain dollars so you can see why a quote leans repair, replace, or borderline, and walk back to your technician with three concrete questions.
+    </p>
+
+    <h2>Editorial Standards &amp; Fact-Checking</h2>
+    <ul>
+      <li><strong>Every regulatory number checked one by one:</strong> Efficiency baselines (10 CFR 430.32 SEER2/HSPF2 minimums), ENERGY STAR thresholds (15.2 SEER2 / 7.8 HSPF2), EPA R-22 phase-out dates (2010 equipment ban, Jan 1, 2020 production/import ban, and AIM Act R-410A phasedown), and IRS Section 25C expiration after December 31, 2025 are verified directly against primary federal agency documents and named in each guide.</li>
+      <li><strong>No invented statistics or scraped pricing tables:</strong> I do not fabricate regional average price charts, scrape proprietary databases, or claim a “guaranteed fair price.” Local labor rates, attic/crawlspace access, ductwork modifications, and permitting fees vary substantially across the United States.</li>
+      <li><strong>No sponsored recommendations:</strong> HVAC Second Opinion accepts zero payments, affiliate commissions, or referral fees from HVAC manufacturers, lead brokers, or contractors. The site is built to be funded transparently by display advertising (such as Google AdSense), never by selling homeowner contact data.</li>
+      <li><strong>Estimates, not professional diagnoses:</strong> All calculator outputs are financial comparison estimates only. Gas, electrical, combustion, and carbon-monoxide safety decisions always require an on-site inspection by a licensed professional.</li>
+    </ul>
+
+    <div style="margin-top: 2rem;">
+      <a class="btn btn-primary" href="/">Open the Calculator →</a>
+    </div>
+  </article>
+</BaseLayout>

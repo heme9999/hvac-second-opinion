@@ -1,0 +1,192 @@
+---
+import Calculator from '../components/Calculator.astro';
+import { GUIDES, SITE } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'What is the $5,000 HVAC repair or replace rule?',
+    answer:
+      'Multiply your HVAC system’s age in years by the repair quote in dollars. If the product exceeds $5,000, the rule of thumb leans toward replacement. We treat it as one reference check rather than a final verdict because labor and equipment costs vary across the United States.',
+  },
+  {
+    question: 'When should I ignore the 50% rule on an HVAC repair?',
+    answer:
+      'If you plan to sell or move within 1–2 years, a brand-new system rarely pays back its full installed cost before you leave. As long as the unit is safe and does not rely on expensive R-22 recharges, repairing can still win on short holding-cost math even near or above 50%.',
+  },
+  {
+    question: 'Why does an R-22 system over 12 years old trigger a replacement flag?',
+    answer:
+      'Under EPA Clean Air Act regulations, production and import of R-22 stopped completely on January 1, 2020, and new R-22 equipment was banned starting in 2010. Only recovered and reclaimed R-22 remains for servicing, making leak repairs expensive and risky on older units.',
+  },
+  {
+    question: 'Is my HVAC quote too high if it does not list permits or a line set?',
+    answer:
+      'A low or vague lump-sum quote can actually hide extra costs or cut corners. Always ask whether municipal permits, EPA Section 608 refrigerant recovery and disposal, a new copper line set (especially when moving from R-22), thermostat wiring, and plenum transitions are included in writing.',
+  },
+  {
+    question: 'What are the current federal SEER2 minimum efficiency standards?',
+    answer:
+      'Under U.S. Department of Energy rules effective January 1, 2023 (10 CFR 430.32), split-system central air conditioners require at least 13.4 SEER2 in the North and 14.3 SEER2 in the Southeast/Southwest below 45,000 Btu/h (13.8 SEER2 at or above 45,000 Btu/h). Split-system heat pumps require 14.3 SEER2 and 7.5 HSPF2 nationwide.',
+  },
+  {
+    question: 'Is the federal 25C HVAC tax credit available for 2026 installations?',
+    answer:
+      'No. According to IRS rules, the Energy Efficient Home Improvement Credit (Section 25C — 30% up to $2,000 per year for qualifying heat pumps) applied only to property placed in service on or before December 31, 2025, and expired for 2026 installations. Check DSIRE for active state and local utility rebates.',
+  },
+  {
+    question: 'How do I tell if a contractor sized my replacement quote properly?',
+    answer:
+      'Ask to see an ACCA Manual J heat-gain and heat-loss calculation for your actual home rather than a rough square-footage rule of thumb. Oversized equipment short-cycles, raises humidity, and wears out compressors prematurely.',
+  },
+] as const;
+
+const webAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'HVAC Second Opinion — Repair or Replace Calculator',
+  url: SITE.url,
+  applicationCategory: 'UtilityApplication',
+  operatingSystem: 'All',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  description:
+    'Free client-side HVAC repair or replace calculator for US homeowners. Audits repair vs. replacement quotes using the $5,000 rule, 50% rule, R-22 hard flag, and multi-year holding costs.',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title="HVAC Repair or Replace Calculator — Free Second Opinion Audit"
+  description="Use our free HVAC repair or replace calculator to audit any contractor quote. Check the $5,000 rule, 50% rule, R-22 flag, and holding cost in seconds."
+  canonicalPath="/"
+  hasCalculator={true}
+  structuredData={[webAppSchema, faqSchema]}
+>
+  <h1>HVAC Repair or Replace Calculator</h1>
+  <p class="intro-lead">
+    Got a steep HVAC repair bill or wondering whether your replacement quote is fair? Enter your numbers below to run four transparent, arithmetic-first checks in your browser—no signup, no phone number, and no contractor lead forms.
+  </p>
+
+  <Calculator />
+
+  <section aria-labelledby="how-it-works-heading">
+    <h2 id="how-it-works-heading">How This Second Opinion Works</h2>
+    <div class="steps-grid">
+      <div class="step-cell">
+        <span class="step-num">STEP 01</span>
+        <h3>Enter Your Two Quotes &amp; System Age</h3>
+        <p class="field-note" style="margin-bottom: 0;">
+          Type the whole-dollar repair quote, a fully installed replacement quote, your unit’s age from its outdoor nameplate, and the refrigerant type.
+        </p>
+      </div>
+      <div class="step-cell">
+        <span class="step-num">STEP 02</span>
+        <h3>Inspect All 4 Transparent Checks</h3>
+        <p class="field-note" style="margin-bottom: 0;">
+          Instead of hiding behind a black-box score, the worksheet shows the exact arithmetic for the $5,000 rule, 50% rule, R-22 phase-out flag, and holding-cost total.
+        </p>
+      </div>
+      <div class="step-cell">
+        <span class="step-num">STEP 03</span>
+        <h3>Take 3 Targeted Questions to Your Tech</h3>
+        <p class="field-note" style="margin-bottom: 0;">
+          Use the generated contractor checklist—covering permits, Manual J sizing, line sets, and repair warranties—to catch missing scope before signing.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="ref-benchmarks-heading">
+    <h2 id="ref-benchmarks-heading">Verified Federal Reference Numbers (DOE, EPA, IRS)</h2>
+    <div tabindex="0" role="region" aria-labelledby="ref-table-caption" class="table-wrapper">
+      <table class="estimate-table">
+        <caption id="ref-table-caption">2026 Homeowner Baseline Standards &amp; Regulatory Cutoffs</caption>
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Verified Rule / Threshold</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Split AC Minimum (North)</th>
+            <td class="tabular">13.4 SEER2 (effective Jan 1, 2023)</td>
+            <td>DOE (10 CFR 430.32)</td>
+          </tr>
+          <tr>
+            <th scope="row">Split AC Minimum (SE / SW)</th>
+            <td class="tabular">14.3 SEER2 (&lt;45k Btu/h) / 13.8 SEER2 (≥45k Btu/h)</td>
+            <td>DOE (10 CFR 430.32)</td>
+          </tr>
+          <tr>
+            <th scope="row">Split Heat Pump Minimum</th>
+            <td class="tabular">14.3 SEER2 / 7.5 HSPF2 nationwide</td>
+            <td>DOE (10 CFR 430.32)</td>
+          </tr>
+          <tr>
+            <th scope="row">ENERGY STAR Heat Pump</th>
+            <td class="tabular">15.2 SEER2 / 7.8 HSPF2 (version 6.1)</td>
+            <td>ENERGY STAR</td>
+          </tr>
+          <tr>
+            <th scope="row">R-22 Production &amp; Import</th>
+            <td>Banned Jan 1, 2020 (new equipment banned since 2010)</td>
+            <td>U.S. EPA</td>
+          </tr>
+          <tr>
+            <th scope="row">Federal 25C Tax Credit</th>
+            <td>Expired Dec 31, 2025 (not available for 2026 installs)</td>
+            <td>IRS</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="faq-heading">
+    <h2 id="faq-heading">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+
+  <section aria-labelledby="guides-heading">
+    <h2 id="guides-heading">HVAC Quote &amp; System Field Guides</h2>
+    <p class="field-note">
+      Every guide includes a worked homeowner example and primary-source numbers from EPA, DOE, ENERGY STAR, and the IRS.
+    </p>
+    <div class="guides-grid">
+      {GUIDES.map((guide) => (
+        <a class="guide-link-row" href={guide.href}>
+          <span class="guide-badge">{guide.badge}</span>
+          <div class="guide-link-title">{guide.shortTitle}</div>
+          <p class="field-note" style="margin-bottom: 0;">{guide.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

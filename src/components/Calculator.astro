@@ -1,0 +1,321 @@
+---
+import { SITE } from '../config/site';
+---
+
+<section aria-label="HVAC Repair or Replace Calculator" id="calc-worksheet">
+  <div class="preset-strip" role="group" aria-label="Sample scenarios">
+    <span class="preset-label">Try a Sample Sheet:</span>
+    <button type="button" class="btn-chip" data-sample="r22">14-yr R-22 ($1,450 vs $9,800)</button>
+    <button type="button" class="btn-chip" data-sample="repair">6-yr R-410A ($480 vs $9,200)</button>
+    <button type="button" class="btn-chip" data-sample="borderline">10-yr Short Stay ($1,100 vs $8,500)</button>
+  </div>
+
+  <div class="calc-layout">
+    <!-- Left Column: Estimate Sheet Inputs -->
+    <div class="estimate-pane">
+      <div class="pane-header">
+        <h2 class="pane-title">1. Your Quote Inputs</h2>
+        <span class="pane-code">FORM HSO-01</span>
+      </div>
+
+      <form id="calc-form" novalidate>
+        <div class="field-group">
+          <label for="repair-quote">
+            Repair quote ($) <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span class="helper-text" id="repair-hint">
+            Enter whole dollars from your contractor’s repair estimate.
+          </span>
+          <div class="input-box">
+            <span class="input-prefix" aria-hidden="true">$</span>
+            <input
+              type="text"
+              id="repair-quote"
+              name="repairQuote"
+              inputmode="numeric"
+              enterkeyhint="next"
+              placeholder="e.g. 1450"
+              required
+              data-whole-dollar="true"
+              data-min="0"
+              data-error="repair-error"
+              aria-describedby="repair-hint"
+            />
+          </div>
+          <div id="repair-error" class="error-msg">
+            Enter a whole-dollar repair quote ($0 or more).
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="replacement-quote">
+            Replacement quote, fully installed ($) <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span class="helper-text" id="replace-hint">
+            Whole dollars including equipment, labor, permits, and disposal.
+          </span>
+          <div class="input-box">
+            <span class="input-prefix" aria-hidden="true">$</span>
+            <input
+              type="text"
+              id="replacement-quote"
+              name="replacementQuote"
+              inputmode="numeric"
+              enterkeyhint="next"
+              placeholder="e.g. 9800"
+              required
+              data-whole-dollar="true"
+              data-min="1"
+              data-error="replace-error"
+              aria-describedby="replace-hint"
+            />
+          </div>
+          <div id="replace-error" class="error-msg">
+            Enter a whole-dollar replacement quote above $0.
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="system-age">
+            System age (years) <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span class="helper-text" id="age-hint">
+            Check the manufacture date on the outdoor condenser nameplate.
+          </span>
+          <div class="input-box">
+            <input
+              type="number"
+              id="system-age"
+              name="systemAge"
+              min="0"
+              max="60"
+              step="1"
+              inputmode="numeric"
+              enterkeyhint="next"
+              placeholder="e.g. 14"
+              required
+              data-error="age-error"
+              aria-describedby="age-hint"
+            />
+            <span class="input-suffix" aria-hidden="true">yrs</span>
+          </div>
+          <div id="age-error" class="error-msg">
+            Enter a system age between 0 and 60 years.
+          </div>
+        </div>
+
+        <div class="field-group">
+          <fieldset class="radio-fieldset">
+            <legend>
+              Refrigerant <span class="req-mark" aria-hidden="true">*</span>
+            </legend>
+            <span class="helper-text">
+              Listed on the outdoor unit rating label (systems built before 2010 often use R-22).
+            </span>
+            <div class="radio-grid">
+              <div class="radio-tile">
+                <input type="radio" id="ref-r22" name="refrigerant" value="r22" required />
+                <label for="ref-r22">R-22</label>
+              </div>
+              <div class="radio-tile">
+                <input type="radio" id="ref-r410a" name="refrigerant" value="r410a" />
+                <label for="ref-r410a">R-410A</label>
+              </div>
+              <div class="radio-tile">
+                <input type="radio" id="ref-r32" name="refrigerant" value="r32" />
+                <label for="ref-r32">R-32</label>
+              </div>
+              <div class="radio-tile">
+                <input type="radio" id="ref-unsure" name="refrigerant" value="unsure" />
+                <label for="ref-unsure">Not sure</label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="field-group">
+          <label for="stay-years">
+            Years you plan to stay in this home <span class="req-mark" aria-hidden="true">*</span>
+          </label>
+          <span class="helper-text" id="stay-hint">
+            Range 1–20 years (default 5). Short stays (1–2 yrs) shift tolerance toward repair.
+          </span>
+          <div class="input-box">
+            <input
+              type="number"
+              id="stay-years"
+              name="stayYears"
+              min="1"
+              max="20"
+              step="1"
+              value="5"
+              inputmode="numeric"
+              enterkeyhint="next"
+              required
+              data-error="stay-error"
+              aria-describedby="stay-hint"
+            />
+            <span class="input-suffix" aria-hidden="true">yrs</span>
+          </div>
+          <div id="stay-error" class="error-msg">
+            Enter a stay horizon from 1 to 20 years.
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="future-annual-repair">
+            Expected future repair costs on the old system ($ per year)
+          </label>
+          <span class="helper-text" id="future-repair-hint">
+            If your old system needed frequent fixes, add a yearly figure.
+          </span>
+          <div class="input-box">
+            <span class="input-prefix" aria-hidden="true">$</span>
+            <input
+              type="text"
+              id="future-annual-repair"
+              name="futureAnnualRepairCost"
+              value="0"
+              inputmode="numeric"
+              enterkeyhint="next"
+              data-whole-dollar="true"
+              data-min="0"
+              data-error="future-repair-error"
+              aria-describedby="future-repair-hint"
+            />
+            <span class="input-suffix" aria-hidden="true">/ yr</span>
+          </div>
+          <div id="future-repair-error" class="error-msg">
+            Enter $0 or a whole-dollar yearly amount.
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="annual-energy-savings">
+            Expected yearly energy savings with a new system ($)
+          </label>
+          <span class="helper-text" id="energy-savings-hint">
+            Only add a figure if you know your bills; leave it at 0 otherwise.
+          </span>
+          <div class="input-box">
+            <span class="input-prefix" aria-hidden="true">$</span>
+            <input
+              type="text"
+              id="annual-energy-savings"
+              name="annualEnergySavings"
+              value="0"
+              inputmode="numeric"
+              enterkeyhint="done"
+              data-whole-dollar="true"
+              data-min="0"
+              data-error="energy-savings-error"
+              aria-describedby="energy-savings-hint"
+            />
+            <span class="input-suffix" aria-hidden="true">/ yr</span>
+          </div>
+          <div id="energy-savings-error" class="error-msg">
+            Enter $0 or a whole-dollar yearly amount.
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button type="submit" class="btn btn-primary">Run 4-Check Audit</button>
+          <button type="button" class="btn btn-secondary" id="clear-form-btn">Clear Sheet</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right Column: Transparent Audit Results -->
+    <div class="estimate-pane" id="results-sheet">
+      <div id="results-worksheet" aria-live="polite">
+        <div class="sheet-header">
+          <div>
+            <span class="sheet-kicker">ESTIMATE WORKSHEET</span>
+            <h2 class="sheet-title">Second Opinion Audit</h2>
+          </div>
+          <span class="verdict-badge verdict-pending">PENDING</span>
+        </div>
+
+        <div class="placeholder-state">
+          <p class="placeholder-lead">
+            Enter your <strong>repair quote</strong>, <strong>replacement quote</strong>, <strong>system age</strong>, and <strong>refrigerant type</strong> on the left to generate a line-by-line decision sheet.
+          </p>
+          <p class="field-note">
+            Or tap one of the sample cases above the form (e.g., “14-yr R-22 System” or “6-yr R-410A Repair”) to inspect how the four checks behave.
+          </p>
+        </div>
+
+        <div class="checks-preview" aria-label="Checks that will run">
+          <h3>4 Checks That Will Run Automatically</h3>
+          <table class="estimate-table">
+            <thead>
+              <tr>
+                <th>Check</th>
+                <th>Rule</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Check A</th>
+                <td>$5,000 rule (age × repair quote)</td>
+                <td class="tabular">— Waiting</td>
+              </tr>
+              <tr>
+                <th scope="row">Check B</th>
+                <td>50% rule (repair ÷ replacement quote)</td>
+                <td class="tabular">— Waiting</td>
+              </tr>
+              <tr>
+                <th scope="row">Check C</th>
+                <td>Hard flag (age &gt; 12 AND R-22 refrigerant)</td>
+                <td class="tabular">— Waiting</td>
+              </tr>
+              <tr>
+                <th scope="row">Check D</th>
+                <td>Holding-cost comparison over your stay horizon</td>
+                <td class="tabular">— Waiting</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="btn-row" style="border-top: 1px solid var(--hairline); padding-top: 0.75rem;">
+        <button type="button" class="btn btn-secondary" id="copy-link-btn">Copy Share Link</button>
+        <span id="copy-link-status" class="field-note" role="status" aria-live="polite" style="align-self: center;"></span>
+      </div>
+
+      <div class="disclaimer-banner">
+        <strong>Notice:</strong> {SITE.disclaimer}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mobile Sticky Bottom Result Bar (Tap to Expand) -->
+<div class="mobile-sticky-shell" id="mobile-sticky-bar">
+  <div id="mobile-result-drawer" class="mobile-result-drawer" hidden data-open="false">
+    <div id="mobile-drawer-body">
+      <p class="field-note">Enter your quotes to run the 4 checks.</p>
+    </div>
+  </div>
+  <button
+    type="button"
+    id="mobile-sticky-toggle"
+    class="mobile-sticky-bar"
+    aria-expanded="false"
+    aria-controls="mobile-result-drawer"
+  >
+    <div>
+      <div class="mobile-sticky-verdict" id="mobile-sticky-verdict">Awaiting Quotes</div>
+      <div class="mobile-sticky-meta" id="mobile-sticky-meta">Enter repair + replace quotes to run 4 checks</div>
+    </div>
+    <span class="mobile-sticky-pill">Details ▲</span>
+  </button>
+</div>
+
+<script>
+  import { initCalculatorApp } from '../ui/app';
+  initCalculatorApp();
+</script>

@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy & AdSense Cookie Disclosure | HVAC Second Opinion"
+  description="HVAC Second Opinion runs all quote calculations locally in your browser with zero user accounts or lead forms. Read our analytics and AdSense cookie disclosure."
+>
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Calculator</a> / <span>Privacy Policy</span>
+  </nav>
+
+  <article class="prose">
+    <h1>Privacy Policy</h1>
+    <p class="intro-lead">
+      <strong>Short version:</strong> Your repair quote, replacement quote, system age, and refrigerant selections are calculated inside your browser and are never transmitted to our servers.
+    </p>
+
+    <h2>1. No Accounts, No Lead Forms, No Personal Data</h2>
+    <ul>
+      <li><strong>Client-side calculation only:</strong> Every calculation runs locally in vanilla TypeScript inside your web browser.</li>
+      <li><strong>No phone numbers, emails, or addresses collected:</strong> We do not ask for your name, ZIP code, phone number, or email address, and we do not sell leads to contractors.</li>
+      <li><strong>Opt-in share links only:</strong> If you click “Copy Share Link”, your numeric inputs are encoded solely in the URL <code>#fragment</code> (browsers do not send URL fragments to servers), and nothing personal is included. We never automatically write your inputs into the URL.</li>
+      <li><strong>Standard server access logs &amp; basic analytics:</strong> Static hosting providers (such as Cloudflare Pages) may record standard transient HTTP request logs (IP address, browser user agent, requested path, and timestamp) strictly for security, abuse prevention, and aggregate traffic measurement.</li>
+    </ul>
+
+    <h2>2. Google AdSense &amp; Advertising Cookie Disclosure</h2>
+    <p>
+      To keep this calculator free without selling homeowner leads, HVAC Second Opinion uses (or may use) <strong>Google AdSense</strong> to display advertisements.
+    </p>
+    <ul>
+      <li>Third-party vendors, including Google, use cookies to serve ads based on a user’s prior visits to this website or other websites.</li>
+      <li>Google’s use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</li>
+      <li>Users may opt out of personalized advertising by visiting <a href="https://myadcenter.google.com/" rel="nofollow noopener noreferrer">Google Ads Settings</a>. Alternatively, you can opt out of a third-party vendor’s use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices/" rel="nofollow noopener noreferrer">aboutads.info</a>.</li>
+    </ul>
+
+    <h2>3. Policy Updates</h2>
+    <p>
+      If analytics or advertising disclosures change, this page will be updated with a revised effective date. For privacy questions, see our <a href="/contact/">Contact page</a>.
+    </p>
+  </article>
+</BaseLayout>

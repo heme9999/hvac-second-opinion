@@ -1,0 +1,109 @@
+---
+import '../styles/tokens.css';
+import { NAV_LINKS, SITE } from '../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  hasCalculator?: boolean;
+  structuredData?: Record<string, unknown> | readonly Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  hasCalculator = false,
+  structuredData,
+} = Astro.props;
+
+const baseSite = Astro.site ?? new URL(SITE.url);
+const normalizedPath = canonicalPath.endsWith('/') ? canonicalPath : `${canonicalPath}/`;
+const canonicalUrl = new URL(normalizedPath, baseSite).toString();
+
+const schemas = structuredData
+  ? Array.isArray(structuredData)
+    ? structuredData
+    : [structuredData]
+  : [];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="text-scale" content="scale" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="theme-color" content="#FAF7F2" />
+    <meta name="google-site-verification" content={SITE.googleSiteVerification} />
+    {schemas.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+  </head>
+  <body class={hasCalculator ? 'has-calculator' : ''}>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a class="site-brand" href="/">
+            <span class="brand-tag" aria-hidden="true">FIELD MANUAL</span>
+            <span>{SITE.name}</span>
+          </a>
+          <nav class="site-nav" aria-label="Primary navigation">
+            {NAV_LINKS.map((link) => {
+              const active =
+                Astro.url.pathname === link.href ||
+                (link.href !== '/' && Astro.url.pathname.startsWith(link.href));
+              return (
+                <a href={link.href} aria-current={active ? 'page' : undefined}>
+                  {link.label}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+        <div class="header-spec-strip">
+          US HOMEOWNER WORKSHEET · CLIENT-SIDE ONLY · NO SIGNUP · NO LEAD FORMS · EPA / DOE / IRS VERIFIED REFERENCES
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="container">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <p style="margin-bottom: 0.35rem;">
+            <strong>{SITE.name}</strong> — Independent repair-vs-replace worksheet and field manual for US homeowners.
+          </p>
+          <p style="margin-bottom: 0;">
+            {SITE.disclaimer} Last updated: <time datetime={SITE.lastUpdated}>{SITE.lastUpdated}</time>.
+          </p>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="/">Calculator</a>
+          <a href="/guides/">All 6 Field Guides</a>
+          <a href="/about/">About (Peter)</a>
+          <a href="/privacy/">Privacy &amp; AdSense</a>
+          <a href="/contact/">Contact</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>

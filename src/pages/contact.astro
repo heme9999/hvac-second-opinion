@@ -1,0 +1,35 @@
+---
+import { SITE } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact Peter | HVAC Second Opinion"
+  description="Contact Peter, creator of HVAC Second Opinion, via email for error corrections, source updates, or general homeowner feedback. No forms or tracking."
+>
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Calculator</a> / <span>Contact</span>
+  </nav>
+
+  <article class="prose">
+    <h1>Contact</h1>
+    <p class="intro-lead">
+      Have a question about a calculation formula, spotted an updated DOE or state rebate rule, or want to suggest a guide topic? Send an email directly—there are no contact forms or tracking pixels on this page.
+    </p>
+
+    <div class="source-callout">
+      <p style="margin-bottom: 0.5rem;">
+        <strong>Direct Email (Peter, Independent Developer):</strong>
+      </p>
+      <p style="margin-bottom: 0;">
+        <a href={`mailto:${SITE.email}?subject=HVAC%20Second%20Opinion%20Feedback`}>
+          {SITE.email}
+        </a>
+      </p>
+    </div>
+
+    <p class="field-note">
+      Please note: I am an independent developer, not a licensed HVAC technician or mechanical engineer, so I cannot inspect equipment or provide binding safety or pricing diagnoses by email.
+    </p>
+  </article>
+</BaseLayout>
