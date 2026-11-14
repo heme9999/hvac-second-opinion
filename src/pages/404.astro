@@ -1,0 +1,37 @@
+---
+import { GUIDES } from '../config/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="404 Page Not Found | HVAC Second Opinion"
+  description="The requested page could not be found on HVAC Second Opinion. Return to the free HVAC repair or replace calculator or browse our 6 homeowner field guides."
+  canonicalPath="/404/"
+>
+  <nav aria-label="Breadcrumb" class="breadcrumb">
+    <a href="/">Calculator</a> / <span>404 Not Found</span>
+  </nav>
+
+  <article class="prose">
+    <h1>404 — Page Not Found</h1>
+    <p class="intro-lead">
+      The worksheet or field guide URL you requested does not exist or may have moved. Use the links below to jump directly to the calculator or any of our six verified guides.
+    </p>
+
+    <div class="btn-row" style="margin-bottom: 2rem;">
+      <a class="btn btn-primary" href="/">Open HVAC Repair or Replace Calculator →</a>
+      <a class="btn btn-secondary" href="/guides/">Browse All 6 Field Guides</a>
+    </div>
+
+    <h2>All Homeowner Field Guides</h2>
+    <div class="guides-grid">
+      {GUIDES.map((guide) => (
+        <a class="guide-link-row" href={guide.href}>
+          <span class="guide-badge">{guide.badge}</span>
+          <div class="guide-link-title">{guide.shortTitle}</div>
+          <p class="field-note" style="margin-bottom: 0;">{guide.summary}</p>
+        </a>
+      ))}
+    </div>
+  </article>
+</BaseLayout>

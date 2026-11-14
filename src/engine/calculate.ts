@@ -16,6 +16,8 @@ function buildQuestions(
   verdict: 'replace' | 'repair' | 'borderline',
   repairQuote: number,
   replacementQuote: number,
+  cleanYears: number,
+  cleanAge: number,
 ): string[] {
   const questions: string[] = [
     'Is this quote itemized, and what is included — permits, disposal, thermostat, line set?',
@@ -23,8 +25,22 @@ function buildQuestions(
 
   const isR22 = inputs.refrigerant === 'r22';
   const nearHalf = replacementQuote > 0 && repairQuote / replacementQuote >= 0.35;
-  const isShortStay = inputs.stayYears <= 2;
+  const isShortStay = cleanYears <= 2;
   const isReplacingOrBorderline = verdict === 'replace' || verdict === 'borderline';
+
+  if (isShortStay) {
+    questions.push(
+      cleanYears === 1
+        ? 'Is there a cheaper repair that gets me through 1 year safely?'
+        : 'Is there a cheaper repair that gets me through 2 years safely?',
+    );
+  }
+
+  if (cleanAge === 0) {
+    questions.push(
+      'Since this system is under 1 year old (age 0), is this repair covered by the manufacturer parts warranty and installer labor warranty?',
+    );
+  }
 
   if (isR22) {
     questions.push(
@@ -44,12 +60,6 @@ function buildQuestions(
     );
   }
 
-  if (isShortStay) {
-    questions.push(
-      'Is there a cheaper repair that gets me through 2 years safely?',
-    );
-  }
-
   const fallbacks = [
     'What warranty comes with this repair, and for how long — if it breaks again in 6 months, what do I pay?',
     'Did you do a Manual J load calculation for sizing, or is the quoted size a rule of thumb?',
@@ -62,7 +72,7 @@ function buildQuestions(
     }
   }
 
-  return questions;
+  return questions.slice(0, 3);
 }
 
 export function calculateSecondOpinion(
@@ -108,6 +118,7 @@ export function calculateSecondOpinion(
       flipExplanation:
         'Enter your repair quote, replacement quote, and stay horizon to see the exact yearly break-even threshold.',
       stayHorizonNote: null,
+      ageWarningNote: null,
       isShortStay: false,
       checks: [],
       firedChecksSummary: 'Waiting for required inputs.',
@@ -129,19 +140,24 @@ export function calculateSecondOpinion(
   // Check A: $5,000 rule (reference only)
   const productA = cleanAge * cleanRepair;
   const firedA = productA > 5000;
+  const isAgeZero = cleanAge === 0;
   const checkA: CheckResult = {
     id: 'A',
     title: 'Check A — $5,000 Rule (reference check)',
     fired: firedA,
     favors: firedA ? 'replace' : 'repair',
-    arithmetic: `${cleanAge} years × ${formatDollars(cleanRepair)} = ${formatDollars(productA)} — ${
-      firedA
-        ? 'over the $5,000 line, leans replace'
-        : 'at or under the $5,000 line, leans repair'
-    }`,
-    explanation: firedA
-      ? 'Age multiplied by repair quote exceeds $5,000, which signals rising risk of another major part failing soon.'
-      : 'Age multiplied by repair quote stays at or below $5,000, so this screening check does not push toward replacement.',
+    arithmetic: isAgeZero
+      ? `0 years × ${formatDollars(cleanRepair)} = $0 — age 0 zeroes out Check A (verify warranty or actual nameplate age), leans repair`
+      : `${cleanAge} years × ${formatDollars(cleanRepair)} = ${formatDollars(productA)} — ${
+          firedA
+            ? 'over the $5,000 line, leans replace'
+            : 'at or under the $5,000 line, leans repair'
+        }`,
+    explanation: isAgeZero
+      ? 'Because system age is entered as 0 years, age × repair equals $0. Confirm whether the unit is genuinely under 1 year old (and under warranty) rather than an unknown age.'
+      : firedA
+        ? 'Age multiplied by repair quote exceeds $5,000, which signals rising risk of another major part failing soon.'
+        : 'Age multiplied by repair quote stays at or below $5,000, so this screening check does not push toward replacement.',
   };
 
   // Check B: 50% rule (reference only)
@@ -241,14 +257,23 @@ export function calculateSecondOpinion(
     flipExplanation = `The repair quote (${formatDollars(cleanRepair)}) is already at or above the replacement quote (${formatDollars(cleanReplace)}), so replacement starts ahead before counting any future repairs or energy savings.`;
   }
 
+  // Age 0 sanity check
+  const ageWarningNote = isAgeZero
+    ? 'Age 0 Sanity Check: You entered 0 years (under 1 year old). A newly installed system should be covered by the 10-year manufacturer parts warranty and 1st-year installer labor warranty—verify warranty coverage before paying out of pocket. If you entered 0 because you do not know the system age, look up the MFR DATE on the outdoor condenser nameplate, as age 0 sets Check A to $0 and skips the Check C age threshold.'
+    : null;
+
   // Stay horizon note
   const isShortStay = cleanYears <= 2;
   const stayHorizonNote = isShortStay
-    ? `Short stay notice (${cleanYears} year${cleanYears === 1 ? '' : 's'}): A new HVAC system will not pay for itself in 1–2 years through utility savings or avoided breakdowns, so repair tolerance is higher unless there is a safety failure or severe R-22 leak.`
+    ? `Short stay notice (${cleanYears} year${cleanYears === 1 ? '' : 's'}): A new HVAC system will not pay for itself in ${
+        cleanYears === 1 ? '1 year (or a 1–2 year window)' : '1–2 years'
+      } through utility savings or avoided breakdowns, so repair tolerance is higher unless there is a safety failure or severe R-22 leak.`
     : null;
 
   // Verdict logic:
   // Replace if Check C fires, or if 2 or more of checks A, B, D favor replace.
+  // Short-stay exception: when staying 1–2 years, Check D favors repair, and Check B did not exceed 50%,
+  // surface Borderline instead of a hard Replace verdict so holding-cost savings and R-22/age risks are weighed openly.
   // Repair if 3 or more of checks A, B, D favor repair and Check C does not fire.
   // Otherwise Borderline.
   const abdChecks = [checkA, checkB, checkD];
@@ -259,7 +284,21 @@ export function calculateSecondOpinion(
   let verdictHeadline: string;
   let verdictDetail: string;
 
-  if (checkC.fired || replaceFavoredCount >= 2) {
+  if (isShortStay && cheaperOption === 'repair' && !checkB.fired && (checkC.fired || replaceFavoredCount >= 2)) {
+    verdict = 'borderline';
+    verdictHeadline = 'Verdict: Borderline';
+    verdictDetail = checkC.fired
+      ? `Your ${cleanAge}-year-old R-22 system triggered the Check C phase-out flag, which normally leans replace—but because you only plan to stay ${cleanYears} year${
+          cleanYears === 1 ? '' : 's'
+        }, repairing is ${formatDollars(differenceDollars)} cheaper over your stay (Check D) and replacement requires ${formatDollars(
+          flipPerYearDollars ?? upfrontGap,
+        )}/year in savings to break even. If the issue is a non-refrigerant electrical or mechanical part, a targeted repair is defensible to bridge your ${cleanYears}-year stay; replace only if the unit has a major R-22 coil/compressor failure or safety issue.`
+      : `Check A and ${
+          replaceFavoredCount >= 2 ? 'other screening rules' : 'age'
+        } lean replace for long-term owners, but over a ${cleanYears}-year stay repairing saves ${formatDollars(
+          differenceDollars,
+        )} (Check D). Either a targeted repair to bridge your move or replacement is defensible depending on repair warranty terms.`;
+  } else if (checkC.fired || replaceFavoredCount >= 2) {
     verdict = 'replace';
     verdictHeadline = 'Verdict: Lean Replace';
     verdictDetail = checkC.fired
@@ -268,7 +307,11 @@ export function calculateSecondOpinion(
   } else if (!checkC.fired && repairFavoredCount >= 3) {
     verdict = 'repair';
     verdictHeadline = 'Verdict: Lean Repair';
-    verdictDetail = `All 3 reference and holding-cost checks (A, B, D) favor repairing, and the R-22 hard flag did not fire.`;
+    verdictDetail = `All 3 reference and holding-cost checks (A, B, D) favor repairing, and the R-22 hard flag did not fire.${
+      isAgeZero
+        ? ' Note: Age 0 sets Check A to $0—confirm whether this unit is covered by first-year installer or manufacturer warranty, or enter the actual nameplate age if unknown.'
+        : ''
+    }`;
   } else {
     verdict = 'borderline';
     verdictHeadline = 'Verdict: Borderline';
@@ -297,9 +340,10 @@ export function calculateSecondOpinion(
     flipPerYearDollars,
     flipExplanation,
     stayHorizonNote,
+    ageWarningNote,
     isShortStay,
     checks: allChecks,
     firedChecksSummary,
-    contractorQuestions: buildQuestions(inputs, verdict, cleanRepair, cleanReplace),
+    contractorQuestions: buildQuestions(inputs, verdict, cleanRepair, cleanReplace, cleanYears, cleanAge),
   };
 }

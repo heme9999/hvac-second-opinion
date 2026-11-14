@@ -115,12 +115,66 @@ describe('calculateSecondOpinion', () => {
       annualEnergySavings: 0,
     });
     expect(res.isShortStay).toBe(true);
+    expect(res.contractorQuestions).toHaveLength(3);
     expect(res.stayHorizonNote).toContain('will not pay for itself in 1–2 years');
     expect(
       res.contractorQuestions.some((q) =>
         q.includes('cheaper repair that gets me through 2 years safely'),
       ),
     ).toBe(true);
+  });
+
+  it('returns Borderline instead of hard Replace for 1-year R-22 short stay when Check D favors repair and caps questions at 3', () => {
+    const res = calculateSecondOpinion({
+      repairQuote: 1450,
+      replacementQuote: 9800,
+      systemAge: 14,
+      refrigerant: 'r22',
+      stayYears: 1,
+      futureAnnualRepairCost: 0,
+      annualEnergySavings: 0,
+    });
+    expect(res.isShortStay).toBe(true);
+    expect(res.verdict).toBe('borderline');
+    expect(res.cheaperOption).toBe('repair');
+    expect(res.differenceDollars).toBe(8350);
+    expect(res.checks.find((c) => c.id === 'C')?.fired).toBe(true);
+    expect(res.contractorQuestions).toHaveLength(3);
+    expect(
+      res.contractorQuestions.some((q) =>
+        q.includes('cheaper repair that gets me through 1 year safely'),
+      ),
+    ).toBe(true);
+  });
+
+  it('always returns strictly 3 questions even when R-22, near-50%, and short-stay triggers all fire', () => {
+    const res = calculateSecondOpinion({
+      repairQuote: 4200,
+      replacementQuote: 9800,
+      systemAge: 14,
+      refrigerant: 'r22',
+      stayYears: 2,
+      futureAnnualRepairCost: 0,
+      annualEnergySavings: 0,
+    });
+    expect(res.contractorQuestions).toHaveLength(3);
+  });
+
+  it('surfaces an Age 0 sanity warning and warranty guidance when systemAge === 0', () => {
+    const res = calculateSecondOpinion({
+      repairQuote: 450,
+      replacementQuote: 9500,
+      systemAge: 0,
+      refrigerant: 'r410a',
+      stayYears: 5,
+      futureAnnualRepairCost: 0,
+      annualEnergySavings: 0,
+    });
+    expect(res.ageWarningNote).not.toBeNull();
+    expect(res.ageWarningNote).toContain('under 1 year old');
+    expect(res.checks.find((c) => c.id === 'A')?.arithmetic).toContain('age 0 zeroes out Check A');
+    expect(res.verdict).toBe('repair');
+    expect(res.verdictDetail).toContain('warranty');
   });
 
   it('round-trips share fragment cleanly without personal data', () => {
@@ -179,14 +233,21 @@ describe('Content, SEO, and design constraints on built dist/', () => {
         .replace(/\s+/g, ' ')
         .trim();
       const wordCount = textOnly.split(' ').filter(Boolean).length;
-      expect(wordCount).toBeGreaterThanOrEqual(800);
+      expect(wordCount).toBeGreaterThanOrEqual(850);
       expect(wordCount).toBeLessThanOrEqual(1200);
+      expect(html).toContain('"@type":"FAQPage"');
+
+      const imgMatch = html.match(/<img[^>]+src="(\/images\/[^"]+\.svg)"/i);
+      expect(imgMatch).not.toBeNull();
+      const svgDiskPath = path.join(distDir, imgMatch![1]!.replace(/^\//, ''));
+      expect(fs.existsSync(svgDiskPath)).toBe(true);
     });
   }
 
-  it('homepage has one H1, FAQPage + WebApplication JSON-LD, and verified pages', () => {
+  it('homepage has one H1, FAQPage + WebApplication JSON-LD, 404 page, external sources, and verified pages', () => {
     const allPages = [
       'index.html',
+      '404.html',
       'about/index.html',
       'privacy/index.html',
       'contact/index.html',
@@ -203,14 +264,29 @@ describe('Content, SEO, and design constraints on built dist/', () => {
       expect(descMatch![1]!.length).toBeLessThanOrEqual(165);
     }
 
+    const notFoundHtml = fs.readFileSync(path.join(distDir, '404.html'), 'utf-8');
+    expect(notFoundHtml).toContain('<h1>404 — Page Not Found</h1>');
+
     const homeHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8');
     expect(homeHtml).toContain('"@type":"WebApplication"');
     expect(homeHtml).toContain('"@type":"FAQPage"');
     expect(homeHtml).not.toContain('Homewyse');
+    expect(homeHtml).toContain('/images/fig-01-decision-matrix.svg');
+    expect(fs.existsSync(path.join(distDir, 'images/fig-01-decision-matrix.svg'))).toBe(true);
 
     const contactHtml = fs.readFileSync(path.join(distDir, 'contact/index.html'), 'utf-8');
-    expect(contactHtml).toContain('mailto:');
+    expect(contactHtml).toContain('mailto:mayday0064@gmail.com');
     expect(contactHtml).not.toContain('<form');
+
+    const privacyHtml = fs.readFileSync(path.join(distDir, 'privacy/index.html'), 'utf-8');
+    expect(privacyHtml).toContain('Effective Date:');
+
+    const combinedDistHtml = allPages
+      .map((rel) => fs.readFileSync(path.join(distDir, rel), 'utf-8'))
+      .join('\n');
+    for (const domain of ['ecfr.gov', 'epa.gov', 'energystar.gov', 'dsireusa.org', 'irs.gov']) {
+      expect(combinedDistHtml).toContain(domain);
+    }
   });
 
   it('built CSS obeys zero border-radius, zero box-shadow, and zero gradients', () => {

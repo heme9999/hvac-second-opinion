@@ -74,6 +74,12 @@ export function renderCalculationResult(
         )
         .join('');
 
+      const ageNoteMobileHtml = result.ageWarningNote
+        ? `<div class="stay-callout" role="note" style="margin-bottom: 0.75rem;">
+             <strong>Age 0 Warranty &amp; Input Check:</strong> ${escapeHtml(result.ageWarningNote)}
+           </div>`
+        : '';
+
       mobileDrawerBodyEl.innerHTML = `
         <div class="totals-compare" style="margin-bottom: 0.75rem;">
           <div class="total-cell">
@@ -89,6 +95,7 @@ export function renderCalculationResult(
             <strong class="total-figure accent tabular">${formatDollars(result.differenceDollars)}</strong>
           </div>
         </div>
+        ${ageNoteMobileHtml}
         <p class="field-note" style="margin-bottom: 0.75rem;">${escapeHtml(result.firedChecksSummary)}</p>
         <div class="mobile-checks-list">${mobileChecksHtml}</div>
         <p class="field-note" style="margin-top: 0.75rem;">${escapeHtml(result.flipExplanation)}</p>
@@ -113,7 +120,7 @@ export function renderCalculationResult(
           Enter your <strong>repair quote</strong>, <strong>replacement quote</strong>, <strong>system age</strong>, and <strong>refrigerant type</strong> on the left to generate a line-by-line decision sheet.
         </p>
         <p class="field-note">
-          Or tap one of the sample cases above the form (e.g., “14-yr R-22 System” or “7-yr R-410A Repair”) to inspect how the four checks behave.
+          Or tap one of the sample cases above the form (“14-yr R-22 ($1,450 vs $9,800)”, “6-yr R-410A ($480 vs $9,200)”, or “10-yr Short Stay ($1,100 vs $8,500)”) to inspect how the four checks behave.
         </p>
       </div>
 
@@ -185,6 +192,12 @@ export function renderCalculationResult(
        </div>`
     : '';
 
+  const ageNoteHtml = result.ageWarningNote
+    ? `<div class="stay-callout" role="note">
+         <strong>Age 0 Warranty &amp; Input Check:</strong> ${escapeHtml(result.ageWarningNote)}
+       </div>`
+    : '';
+
   worksheetEl.innerHTML = `
     <div class="sheet-header">
       <div>
@@ -197,6 +210,7 @@ export function renderCalculationResult(
     <p class="verdict-detail">${escapeHtml(result.verdictDetail)}</p>
     <p class="fired-summary"><strong>Check Summary:</strong> ${escapeHtml(result.firedChecksSummary)}</p>
 
+    ${ageNoteHtml}
     ${stayNoteHtml}
 
     <div class="totals-compare" aria-label="Holding cost comparison">

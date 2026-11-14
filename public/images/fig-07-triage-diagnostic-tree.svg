@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" role="img" aria-labelledby="fig07-title fig07-desc">
+  <title id="fig07-title">Figure 07: HVAC Symptom Triage Tree — Safety vs. Terminal vs. Wear Parts</title>
+  <desc id="fig07-desc">Diagnostic triage diagram separating immediate safety shutdown hazards, terminal major component failures, and inexpensive electrical or maintenance wear items worth repairing.</desc>
+  <rect width="820" height="330" fill="#FAF7F2" stroke="#1F2937" stroke-width="2" />
+  <rect x="0" y="0" width="820" height="34" fill="#1F2937" />
+  <text x="16" y="22" fill="#FAF7F2" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" font-weight="700">FIG 07 · HVAC BREAKDOWN TRIAGE: SAFETY VS. TERMINAL VS. WEAR</text>
+  <text x="804" y="22" fill="#C2410C" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">FIELD DIAGNOSTIC</text>
+
+  <!-- Group 1: Safety -->
+  <rect x="22" y="54" width="246" height="252" fill="#FEF2F2" stroke="#B91C1C" stroke-width="2" />
+  <rect x="22" y="54" width="246" height="32" fill="#B91C1C" />
+  <text x="34" y="75" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">GROUP 1 · SAFETY SHUTDOWN</text>
+  <text x="34" y="110" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Call Licensed Pro Now:</text>
+  <text x="34" y="136" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Cracked heat exchanger / CO</text>
+  <text x="34" y="160" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Active gas odor or blocked flue</text>
+  <text x="34" y="184" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Melting wires / tripped breakers</text>
+  <rect x="34" y="218" width="222" height="72" fill="#FFFFFF" stroke="#B91C1C" stroke-width="1.5" />
+  <text x="44" y="239" fill="#B91C1C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">ACTION OVERRIDE:</text>
+  <text x="44" y="258" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">Safety overrides dollar rules.</text>
+  <text x="44" y="276" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">Red-tag until inspected.</text>
+
+  <!-- Group 2: Terminal -->
+  <rect x="287" y="54" width="246" height="252" fill="#FFF4ED" stroke="#C2410C" stroke-width="2" />
+  <rect x="287" y="54" width="246" height="32" fill="#C2410C" />
+  <text x="299" y="75" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">GROUP 2 · TERMINAL / HIGH RISK</text>
+  <text x="299" y="110" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Leans Replace Over Age 12:</text>
+  <text x="299" y="136" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Out-of-warranty compressor</text>
+  <text x="299" y="160" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Major R-22 evaporator coil leak</text>
+  <text x="299" y="184" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Back-to-back board + blower</text>
+  <rect x="299" y="218" width="222" height="72" fill="#FFFFFF" stroke="#C2410C" stroke-width="1.5" />
+  <text x="309" y="239" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">WORKED EXAMPLE B (R-22):</text>
+  <text x="309" y="258" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">15 yr · $3,200 vs $10,400</text>
+  <text x="309" y="276" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">Check A $48k + Check C -&gt; Replace</text>
+
+  <!-- Group 3: Routine Wear -->
+  <rect x="552" y="54" width="246" height="252" fill="#ECFDF5" stroke="#166534" stroke-width="2" />
+  <rect x="552" y="54" width="246" height="32" fill="#166534" />
+  <text x="564" y="75" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">GROUP 3 · ROUTINE WEAR PARTS</text>
+  <text x="564" y="110" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Usually Worth Repairing:</text>
+  <text x="564" y="136" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Dual run capacitor or contactor</text>
+  <text x="564" y="160" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Clogged drain / float switch</text>
+  <text x="564" y="184" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">• Flame sensor or igniter</text>
+  <rect x="564" y="218" width="222" height="72" fill="#FFFFFF" stroke="#166534" stroke-width="1.5" />
+  <text x="574" y="239" fill="#166534" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">WORKED EXAMPLE A (R-410A):</text>
+  <text x="574" y="258" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">9 yr · $360 vs $9,500 · 5 yr stay</text>
+  <text x="574" y="276" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12">Saves $7,890 ($1,110 vs $9,000)</text>
+</svg>

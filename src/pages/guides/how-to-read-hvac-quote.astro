@@ -1,10 +1,43 @@
 ---
+import { OFFICIAL_SOURCES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'Should a contractor list model numbers and the AHRI certificate on an HVAC quote?',
+    answer:
+      'Yes. Exact outdoor condenser and indoor coil model numbers plus the AHRI Certified Reference Number let you confirm DOE 10 CFR 430.32 SEER2 compliance and verify rebate eligibility before paying a deposit.',
+  },
+  {
+    question: 'How much do omitted permits, line sets, and plenum transitions add to a cheap quote?',
+    answer:
+      'Leaving permits, a new copper line set, disconnect wiring, and sheet-metal transitions off an initial bid often shifts $1,000 to $1,800 into mid-install change orders or leaves code compliance unverified.',
+  },
+  {
+    question: 'Why does an R-22 replacement bid usually need a new copper line set?',
+    answer:
+      'R-22 equipment used mineral oil while newer R-410A, R-454B, and R-32 systems use POE synthetic oil. Residual oil or undersized suction piping can damage the replacement compressor unless replaced or properly flushed.',
+  },
+] as const;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="How to Read an HVAC Quote (Line Items & Red Flags) | HVAC Second Opinion"
   description="Learn how to read an HVAC quote line by line, spot missing permits, disposal, line sets, and thermostat work, and avoid vague contractor bid traps."
+  structuredData={faqSchema}
 >
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/">Calculator</a> / <a href="/guides/">Guides</a> / <span>How to Read an HVAC Quote</span>
@@ -13,25 +46,39 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <article class="prose">
     <h1>How to Read an HVAC Quote</h1>
     <p class="intro-lead">
-      Two HVAC contractors can price the exact same 3-ton heat pump within $400 of each other while offering completely different scopes of work. One quote covers city mechanical permits, a fresh copper line set, and proper refrigerant recovery; the other is a three-line total that triggers $1,200 in change orders once your old condenser is sitting in the driveway.
+      Two HVAC contractors can price the exact same 3-ton heat pump <strong>$1,500 apart ($7,900 vs. $9,400)</strong> while delivering wildly different scopes of work. One quote covers city mechanical permits, a fresh copper line set, and proper EPA recovery; the other is a vague total that triggers $1,700 in change orders once your old condenser sits in the driveway.
     </p>
 
     <h2>What a Complete Replacement Quote Should List</h2>
     <p>
-      A fair, auditable installation bid reads like a parts-and-labor manifest rather than a brochure. Before comparing prices across contractors, verify that every estimate spells out these six core line items:
+      An auditable installation bid reads like a parts-and-labor manifest rather than a brochure. Before comparing prices, confirm every bid includes these six core items:
     </p>
     <ul>
-      <li><strong>Exact outdoor and indoor model numbers:</strong> You need the manufacturer, tonnage, and AHRI Certified Reference Number so you can confirm the matched system actually meets U.S. Department of Energy (DOE) regional minimums (13.4 SEER2 in the North, or 14.3 SEER2 / 13.8 SEER2 in the Southeast and Southwest under 10 CFR 430.32).</li>
-      <li><strong>Refrigerant type specified on the bid:</strong> Under the EPA AIM Act phasedown, new residential air conditioners and heat pumps sold today transition from R-410A to lower-GWP A2L refrigerants such as R-454B or R-32. Your quote should state which refrigerant the matched coil and condenser use.</li>
-      <li><strong>Labor scope and installation materials:</strong> Look for condenser pad leveling, condensate drain trap and float safety switch, electrical disconnect box and whip, and sheet-metal plenum transitions.</li>
-      <li><strong>Repair vs. replacement warranty terms separated clearly:</strong> Manufacturer parts warranties (typically 10 years when registered) cover defective components, not refrigerant or labor. A trustworthy quote separates the manufacturer parts warranty from the contractor’s labor warranty in years.</li>
-      <li><strong>Load calculation method:</strong> A written note stating that equipment capacity is verified via an ACCA Manual J load calculation rather than guessing from square footage.</li>
-      <li><strong>Payment schedule and cancellation terms:</strong> Standard milestones split deposits, delivery/install completion, and final municipal inspection pass rather than demanding 100% upfront.</li>
+      <li><strong>Exact outdoor and indoor model numbers:</strong> Require manufacturer, tonnage, and the AHRI Certified Reference Number to verify compliance with <a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">U.S. DOE regional minimums (10 CFR 430.32)</a>—13.4 SEER2 North, or 14.3 / 13.8 SEER2 Southeast and Southwest. See <a href="/guides/seer2-explained/">our SEER2 guide</a> for tier breakdowns.</li>
+      <li><strong>Refrigerant type named on the bid:</strong> Under the <a href={OFFICIAL_SOURCES.epaAim} target="_blank" rel="noopener noreferrer">EPA AIM Act phasedown</a>, new residential split systems transition from R-410A to lower-GWP A2L fluids such as R-454B or R-32. Your contract should name the exact refrigerant.</li>
+      <li><strong>Installation materials and safety switches:</strong> Look for condenser pad leveling, condensate trap and float switch, 240V disconnect whip, and sealed plenum transitions.</li>
+      <li><strong>Parts vs. labor warranties separated:</strong> Manufacturer parts warranties (typically 10 years registered) exclude refrigerant and technician labor. Verify written contractor labor years separately.</li>
+      <li><strong>Documented load sizing:</strong> Written confirmation of an ACCA Manual J load calculation rather than guessing by square footage (see <a href="/guides/how-to-vet-hvac-contractor/">how to vet a contractor</a>).</li>
+      <li><strong>Milestone payment schedule:</strong> Payments tied to deposit, installation completion, and passed municipal inspection rather than 100% upfront.</li>
     </ul>
+
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-02-quote-anatomy.svg"
+        alt="Technical diagram linking indoor air handler, copper line set, thermostat wire, and outdoor condenser with five commonly omitted HVAC quote items."
+        width="820"
+        height="340"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 02: Five line items most often omitted from low lump-sum replacement quotes ($7,900 base + $1,700 missed scope = $9,600 real cost).
+      </figcaption>
+    </figure>
 
     <h2>Five Items Most Commonly Missing From HVAC Quotes</h2>
     <p>
-      When a bid comes in suspiciously lower than two competing quotes, check the five items below first. Leaving them out does not eliminate the work—it only shifts the cost to an invoice surprise later.
+      When a bid lands noticeably lower than competing proposals, check these five scope lines first—omitting them rarely eliminates the work:
     </p>
 
     <div tabindex="0" role="region" aria-label="Commonly omitted HVAC quote line items" class="table-wrapper">
@@ -46,61 +93,69 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <tbody>
           <tr>
             <th scope="row">Municipal Permits &amp; Inspection</th>
-            <td>Most US cities require a mechanical permit (and electrical permit if breaker size changes). Unpermitted work creates insurance and home-sale disclosure headaches.</td>
-            <td>“Contractor pulls and pays for city mechanical/electrical permits and schedules final inspection.”</td>
+            <td>Most US jurisdictions require mechanical and electrical permits; unpermitted swaps create home-sale and insurance issues.</td>
+            <td>“Contractor pulls and pays for municipal permits and schedules final inspection.”</td>
           </tr>
           <tr>
             <th scope="row">EPA 608 Recovery &amp; Disposal</th>
-            <td>Under EPA Section 608 rules, venting refrigerant to the atmosphere is illegal. Old equipment and refrigerant must be recovered and hauled away properly.</td>
-            <td>“Includes EPA Section 608 recovery of existing refrigerant and haul-away/disposal of old units.”</td>
+            <td>Under <a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">EPA Clean Air Act rules</a>, venting refrigerant is illegal; recovered gas and old cabinets require documented disposal.</td>
+            <td>“Includes EPA Section 608 recovery of old charge and haul-away of old equipment.”</td>
           </tr>
           <tr>
             <th scope="row">Copper Line Set Replacement</th>
-            <td>Moving from an R-22 system (mineral oil) to R-410A, R-454B, or R-32 (POE synthetic oil) leaves incompatible oil residue and undersized suction lines if reused carelessly.</td>
-            <td>“New insulated copper suction and liquid line set sized to manufacturer spec (or pressure-tested flush protocol if inaccessible).”</td>
+            <td>Moving from <a href="/guides/r22-refrigerant/">R-22 mineral oil</a> to R-410A, R-454B, or R-32 POE synthetic oil risks oil contamination or undersized suction piping.</td>
+            <td>“New insulated copper suction and liquid lines sized to spec (or approved flush if concealed).”</td>
           </tr>
           <tr>
             <th scope="row">Thermostat &amp; Low-Voltage Wire</th>
-            <td>Two-stage or heat-pump systems often require extra thermostat conductors (5 to 8 wires) or an outdoor sensor that old 4-wire cables lack.</td>
-            <td>“Thermostat model included; replace or add low-voltage thermostat cable if existing conductors are insufficient.”</td>
+            <td>Heat pumps and two-stage equipment need 5 to 8 conductors that older 4-wire thermostat cables lack.</td>
+            <td>“Thermostat model included plus new 18/8 cable pull if existing conductors fall short.”</td>
           </tr>
           <tr>
             <th scope="row">Ductwork &amp; Plenum Transitions</th>
-            <td>New air handlers rarely match 18-year-old cabinet dimensions. Forcing a new cabinet onto leaking or undersized return drops static pressure and kills blowers early.</td>
-            <td>“Custom sheet-metal supply/return plenum transitions, mastic sealing, and filter rack replacement included.”</td>
+            <td>Forcing a taller air handler onto leaky old plenums spikes static pressure and wears out blower motors early.</td>
+            <td>“Custom sheet-metal supply/return transitions, mastic sealing, and filter rack included.”</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <h2>Worked Example: Comparing Two Quotes Side by Side</h2>
+    <h2>Worked Example: Comparing Two Bids Side by Side ($7,900 vs. $9,400)</h2>
     <div class="worked-example">
       <p>
-        Suppose a homeowner with a 15-year-old R-22 3-ton split AC receives two quotes to replace the system:
+        A homeowner with a 15-year-old R-22 3-ton split AC receives two quotes for the same nominal capacity:
       </p>
       <ul>
-        <li><strong>Contractor A (“Quick Bid”):</strong> Total written price <strong>$7,900</strong>. Text says “Install 3-ton 14 SEER2 AC and coil, standard installation.” No model numbers, no line-set mention, and small print at the bottom says “Permits and code upgrades billed separately if required.”</li>
-        <li><strong>Contractor B (“Itemized Bid”):</strong> Total written price <strong>$9,400</strong>. Lists matched condenser and evaporator coil AHRI reference number rated at 15.2 SEER2, specifies new insulated copper line set, new 240V whip and fused disconnect, sheet-metal return box with 4-inch media filter cabinet, condensate float switch, EPA 608 recovery/disposal, municipal mechanical permit, and a 2-year labor warranty.</li>
+        <li><strong>Contractor A (“Quick Bid”):</strong> <strong>$7,900</strong> flat line: “Install 3-ton 14 SEER2 AC and coil.” No model numbers, no line set, and small print: “Permits and code upgrades billed separately.”</li>
+        <li><strong>Contractor B (“Itemized Bid”):</strong> <strong>$9,400</strong> total, listing matched AHRI reference at 15.2 SEER2, new copper line set, 240V disconnect whip, sheet-metal return plenum with 4-inch filter cabinet, condensate float switch, EPA 608 recovery, municipal permit, and 2-year labor warranty.</li>
       </ul>
       <p style="margin-bottom: 0;">
-        <strong>The math check:</strong> Adding a missed municipal permit ($250), a new line set ($750), a disconnect/drain safety kit ($300), and a media filter transition ($400) turns Contractor A’s “$7,900” bid into <strong>$9,600</strong>—with zero clarity on equipment matching or warranty. Contractor B’s $9,400 itemized quote is actually cheaper and carries verifiable DOE compliance.
+        <strong>The math check:</strong> Adding an omitted permit ($250), new line set ($750), disconnect/safety kit ($300), and plenum transition ($400) raises Contractor A’s $7,900 bid by <strong>$1,700</strong> to <strong>$9,600</strong>—making the “cheaper” bid <strong>$200 more expensive</strong> than Contractor B’s $9,400 scope.
       </p>
     </div>
 
     <h2>Red Flags on Repair Quotes Too</h2>
-    <p>
-      Vague quotes are just as dangerous on a $900 repair call as on a $9,400 replacement:
-    </p>
     <ol>
-      <li><strong>No diagnostic breakdown:</strong> A repair quote that says “Fix AC — $1,150” without naming the failed part (capacitor, contactor, blower motor, TXV valve, or refrigerant leak location) makes it impossible to check whether the tech is guessing.</li>
-      <li><strong>“Top off refrigerant” without finding the leak:</strong> Refrigerant is not consumed like fuel. If your system is low, adding R-22 or R-410A without locating and repairing the leak guarantees you pay twice.</li>
-      <li><strong>Same-day expiration discounts:</strong> High-pressure claims that a replacement price jumps $1,500 if you do not sign before the technician leaves your driveway are sales tactics, not technical realities.</li>
-      <li><strong>Skipping the model/serial nameplate:</strong> If a tech quotes an R-22 recharge or coil swap without inspecting the outdoor unit’s refrigerant stamp and age, pause and ask for a written scope.</li>
+      <li><strong>Zero part diagnosis:</strong> A line reading “Fix AC — $1,150” without naming the capacitor, contactor, blower motor, TXV valve, or leak site prevents price verification.</li>
+      <li><strong>“Top off refrigerant” without leak search:</strong> Sealed units do not burn refrigerant. Adding R-22 or R-410A without locating the pinhole leak wastes money.</li>
+      <li><strong>Today-only cliff discounts:</strong> Claims that prices rise $1,500 if you wait 24 hours are sales urgency, not mechanical reality.</li>
     </ol>
 
-    <h2>Next Step: Put Your Quote Through the Numbers</h2>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <h2>Next Step: Run the Numbers</h2>
     <p>
-      Once you have confirmed the repair and replacement quotes are genuinely apples-to-apples, plug both numbers into our <a href="/">HVAC Repair or Replace Calculator</a> to see whether the $5,000 rule, 50% rule, R-22 check, or your stay horizon leans repair or replace. If you are replacing, read <a href="/guides/how-to-vet-hvac-contractor/">how to vet an HVAC contractor</a> before picking the winning bid.
+      Once your quotes cover equal scope, enter both totals into the <a href="/">HVAC Repair or Replace Calculator</a> and review <a href="/guides/5000-rule/">the $5,000 and 50% rules</a> before approving work.
     </p>
   </article>
 </BaseLayout>

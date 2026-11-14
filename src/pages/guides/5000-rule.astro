@@ -1,10 +1,43 @@
 ---
+import { OFFICIAL_SOURCES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'Why does the $5,000 rule still trigger on modest repairs for 10-year-old units?',
+    answer:
+      'Equipment and skilled labor inflation raised typical installed split-system prices well above historical $5,000 levels. On a 10-year-old unit, any repair over $500 exceeds $5,000 even when that fix is under 7% of replacement cost.',
+  },
+  {
+    question: 'When does Check D holding-cost math override the $5,000 or 50% rule?',
+    answer:
+      'When your planned stay is short (1 to 2 years), or when future annual repairs plus annual utility penalties remain far below replacement minus repair divided by years stayed, Check D shows repairing keeps more cash.',
+  },
+  {
+    question: 'Does passing both the $5,000 rule and 50% rule make an R-22 leak safe to repair?',
+    answer:
+      'No. Neither screening ratio accounts for phased-out R-22 refrigerant scarcity after the EPA banned virgin R-22 production and import on January 1, 2020.',
+  },
+] as const;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="The $5,000 Rule and 50% Rule Explained | HVAC Second Opinion"
   description="Understand how the HVAC $5,000 rule and 50% rule work, see worked examples, and learn why both are screening checks rather than final verdicts."
+  structuredData={faqSchema}
 >
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/">Calculator</a> / <a href="/guides/">Guides</a> / <span>$5,000 Rule &amp; 50% Rule</span>
@@ -13,76 +46,108 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <article class="prose">
     <h1>The $5,000 Rule and the 50% Rule Explained</h1>
     <p class="intro-lead">
-      Almost every homeowner facing a big HVAC bill runs into two shortcuts: the <strong>$5,000 rule</strong> and the <strong>50% rule</strong>. Both take five seconds to compute, which makes them useful smoke alarms—but treating either one as an automatic verdict can cost you thousands of dollars.
+      Nearly every homeowner weighing a large HVAC invoice runs into two shortcuts: the <strong>$5,000 rule</strong> and the <strong>50% rule</strong>. Both take five seconds to compute, making them quick warning lights—but treating either shortcut as an automatic verdict can cost thousands of dollars.
     </p>
 
     <h2>1. What Is the $5,000 Rule?</h2>
     <p>
-      The $5,000 rule multiplies your system’s age in years by the repair quote in dollars:
+      The $5,000 rule multiplies equipment age in years by the contractor’s repair estimate in dollars:
     </p>
     <div class="source-callout">
       <strong>Formula:</strong> <code>System Age (years) × Repair Quote ($)</code><br />
-      If the result is <strong>over $5,000</strong>, the rule of thumb leans toward replacement. If it is <strong>$5,000 or less</strong>, it leans toward repair.
+      Above <strong>$5,000</strong> leans toward replacement; <strong>$5,000 or less</strong> leans toward repair.
     </div>
     <p>
-      The logic behind the formula is simple: an expensive repair on a 4-year-old unit still leaves roughly a decade of service life ahead, whereas spending the same dollar amount on a 16-year-old unit buys very little remaining runway before the next major component fails.
+      An $800 repair on a 4-year-old heat pump scores $3,200 because plenty of service life remains; the same $800 on a 16-year-old unit scores $12,800 because another major part may fail soon.
     </p>
 
     <h2>2. What Is the 50% Rule?</h2>
     <p>
-      The 50% rule ignores age and compares the repair quote directly against the cost of a brand-new installed replacement:
+      The 50% rule ignores age and compares repair cost directly against an itemized replacement quote:
     </p>
     <div class="source-callout">
       <strong>Formula:</strong> <code>Repair Quote ($) ÷ Replacement Quote ($)</code><br />
-      If the repair exceeds <strong>50% of a full replacement quote</strong>, the rule leans toward replacing instead of sinking half the price of a new system into old metal.
+      Above <strong>50% of installed replacement cost</strong> signals stopping repairs and replacing instead.
     </div>
+
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-03-rules-threshold-chart.svg"
+        alt="Chart comparing the $5,000 rule repair ceiling across system ages 4 to 18 against a $5,000 50-percent replacement line on a $10,000 system."
+        width="820"
+        height="330"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 03: Why the $5,000 rule tightens sharply after age 10 while the 50% line stays flat—and why holding-cost math and R-22 checks are both needed.
+      </figcaption>
+    </figure>
 
     <h2>3. Why Both Rules Are Reference Checks—Not Verdicts</h2>
     <p>
-      On our <a href="/">HVAC Repair or Replace Calculator</a>, Check A ($5,000 rule) and Check B (50% rule) are displayed openly alongside Check C (R-22 refrigerant risk) and Check D (multi-year holding cost). Here is why neither rule of thumb works alone:
+      Inside the <a href="/">HVAC Repair or Replace Calculator</a>, Check A ($5,000 rule) and Check B (50% rule) appear alongside Check C (R-22 risk) and Check D (stay-horizon holding costs). Neither ratio works alone for four reasons:
     </p>
     <ul>
-      <li><strong>Equipment and labor inflation warped $5,000:</strong> The $5,000 threshold became popular when a standard split AC replacement cost roughly $4,000 to $5,500. Today, higher DOE 2023 SEER2 baseline equipment, AIM Act refrigerant changes, and skilled labor push many full split-system installs to $8,500–$14,000. On a 10-year-old unit, a $550 blower-motor or board repair scores <code>10 × $550 = $5,500</code> and triggers the $5,000 rule—even though $550 is only 5.5% of a $10,000 replacement.</li>
-      <li><strong>Neither rule knows how long you are staying:</strong> If you are selling your house in 18 months, replacing a safe R-410A system for $10,000 just to dodge a $1,600 repair destroys net cash because buyers rarely pay dollar-for-dollar extra for a brand-new furnace or condenser.</li>
-      <li><strong>Neither rule detects R-22 refrigerant scarcity:</strong> A $450 leak recharge on an 11-year-old unit passes the $5,000 rule (<code>11 × $450 = $4,950</code>) and passes the 50% rule, yet R-22 production and import were banned by the EPA on January 1, 2020. Paying for reclaimed R-22 without fixing the leak is throwing cash into a leaking bucket.</li>
-      <li><strong>The 50% rule misses repeated breakdowns:</strong> A $1,200 repair on a $9,500 system is only 12.6% (well below 50%), but if that aging system also requires $700 a year in follow-on repairs over the next 8 years, the cumulative repair bill climbs to $6,800 before you still end up replacing it.</li>
+      <li><strong>Installed replacement costs rose:</strong> Post-2023 <a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE 10 CFR 430.32 SEER2 equipment</a>, refrigerant transitions, and labor mean many split installs run $8,500–$14,000. A $680 wear repair on a 10-year-old unit trips $5,000 yet equals under 7% of replacement.</li>
+      <li><strong>Short homeowner stays flip the math:</strong> Selling within 1–2 years leaves no time to recover a $9,800 capital outlay; check <a href="/guides/signs-your-hvac-is-dying/">which repairs safely bridge a short stay</a>.</li>
+      <li><strong>R-22 risk is invisible to ratios:</strong> Even a low quote fails long-term economics when leaks require reclaimed R-22, whose production was banned on January 1, 2020 (<a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">U.S. EPA</a>).</li>
+      <li><strong>Chronic annual repairs add up:</strong> Repeating $600–$800 yearly repairs slowly matches new-system cash flow.</li>
     </ul>
 
     <h2>Worked Example 1: When the $5,000 Rule Overreacts</h2>
     <div class="worked-example">
       <p>
-        <strong>Scenario:</strong> Homeowner in Ohio has a 10-year-old R-410A gas furnace and central AC. A failed inducer draft motor is quoted at <strong>$680</strong> to repair, versus <strong>$10,200</strong> to replace the full system. They plan to stay in the home for <strong>5 years</strong> and estimate $150/year in routine future repairs and $100/year in energy savings.
+        <strong>Scenario:</strong> Ohio homeowner, 10-year-old R-410A furnace/AC. Inducer motor repair = <strong>$680</strong>; verified <a href="/guides/how-to-read-hvac-quote/">itemized replacement bid</a> = <strong>$10,200</strong>. Planned stay = <strong>5 years</strong>, estimated future repairs = <strong>$150/yr</strong>, energy savings = <strong>$100/yr</strong>.
       </p>
       <ul>
         <li><strong>Check A ($5,000 rule):</strong> <code>10 × $680 = $6,800</code> → Over $5,000 (leans replace).</li>
-        <li><strong>Check B (50% rule):</strong> <code>$680 ÷ $10,200 = 6.7%</code> → Well under 50% (leans repair).</li>
-        <li><strong>Check C (R-22 hard flag):</strong> Not fired (uses R-410A and age is 10).</li>
-        <li><strong>Check D (5-year holding cost):</strong> Repair total = <code>$680 + (5 × $150) = $1,430</code>. Replacement total = <code>$10,200 − (5 × $100) = $9,700</code>. Repairing saves <strong>$8,270</strong>.</li>
+        <li><strong>Check B (50% rule):</strong> <code>$680 ÷ $10,200 = 6.7%</code> → Under 50% (leans repair).</li>
+        <li><strong>Check C (R-22 hard flag):</strong> Clear (R-410A, age 10).</li>
+        <li><strong>Check D (5-year holding cost):</strong> Repair = <code>$680 + (5 × $150) = $1,430</code> vs. Replace = <code>$10,200 − (5 × $100) = $9,700</code>. Repairing saves <strong>$8,270</strong>.</li>
       </ul>
       <p style="margin-bottom: 0;">
-        <strong>Result:</strong> Even though the $5,000 rule fired, Checks B and D strongly favor repairing. Replacing a 10-year-old R-410A unit over a $680 wear part would make no financial sense.
+        <strong>Result:</strong> Check A fired alone while Checks B and D save over $8,000—making targeted repair the rational choice unless other safety failures appear.
       </p>
     </div>
 
-    <h2>Worked Example 2: When Holding-Cost Math Overrules a Low Percentage</h2>
+    <h2>Worked Example 2: When Holding Costs Override a Low Percentage</h2>
     <div class="worked-example">
       <p>
-        <strong>Scenario:</strong> Homeowner in Arizona has a 15-year-old R-22 heat pump. Quote to replace a leaking evaporator coil and top off reclaimed R-22 is <strong>$2,800</strong>; a matched 15.2 SEER2 ENERGY STAR heat pump replacement is <strong>$10,800</strong>. Planned stay is <strong>8 years</strong>, expected ongoing annual repairs on the old rig are <strong>$600/yr</strong>, and expected bill savings are <strong>$350/yr</strong>.
+        <strong>Scenario:</strong> Arizona homeowner, 15-year-old R-22 heat pump. Evaporator coil + reclaimed R-22 = <strong>$2,800</strong>; matched 15.2 SEER2 <a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR</a> replacement = <strong>$10,800</strong>. Stay = <strong>8 years</strong>, expected ongoing repairs = <strong>$600/yr</strong>, <a href="/guides/seer2-explained/">SEER2 utility savings</a> = <strong>$350/yr</strong>.
       </p>
       <ul>
         <li><strong>Check A ($5,000 rule):</strong> <code>15 × $2,800 = $42,000</code> → Fires replace.</li>
-        <li><strong>Check B (50% rule):</strong> <code>$2,800 ÷ $10,800 = 25.9%</code> → Under 50% (leans repair on a naive ratio check).</li>
-        <li><strong>Check C (R-22 hard flag):</strong> Age &gt; 12 and R-22 → Fires hard flag (replace).</li>
-        <li><strong>Check D (8-year holding cost):</strong> Repair total = <code>$2,800 + (8 × $600) = $7,600</code>. Replacement total = <code>$10,800 − (8 × $350) = $8,000</code>. Even before accounting for another major failure, the two 8-year totals sit within $400 of each other, and Check C flags terminal R-22 risk.</li>
+        <li><strong>Check B (50% rule):</strong> <code>$2,800 ÷ $10,800 = 25.9%</code> → Under 50%.</li>
+        <li><strong>Check C (R-22 hard flag):</strong> Age &gt; 12 and R-22 → Fires hard flag (<a href="/guides/r22-refrigerant/">R-22 phaseout risk</a>).</li>
+        <li><strong>Check D (8-year holding cost):</strong> Repair = <code>$2,800 + (8 × $600) = $7,600</code> vs. Replace = <code>$10,800 − (8 × $350) = $8,000</code>. Annual flip threshold is <code>($10,800 − $2,800) ÷ 8 = $1,000/yr</code>, nearly matched by $950/yr combined penalty before one compressor breakdown hits.</li>
       </ul>
-      <p style="margin-bottom: 0;">
-        <strong>Flip threshold:</strong> <code>($10,800 − $2,800) ÷ 8 = $1,000/yr</code>. Since combined annual repairs plus energy penalty ($600 + $350 = $950/yr) is just $50 shy of flipping holding cost alone, adding one unplanned compressor failure pushes replacement dramatically ahead.
-      </p>
     </div>
 
-    <h2>How to Use Both Rules Properly</h2>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <h2>How to Pair Both Rules With Holding-Cost Math</h2>
     <p>
-      Treat the $5,000 rule and the 50% rule as two columns on an estimate sheet—not a coin toss. Combine them with refrigerant status (<a href="/guides/r22-refrigerant/">read the R-22 guide</a>), realistic holding horizon, and true <a href="/guides/seer2-explained/">SEER2 bill savings</a> inside the <a href="/">calculator</a> so you see the exact dollar threshold where your decision flips.
+      To turn the $5,000 rule and 50% rule from blunt shortcuts into a reliable budget decision, track two extra columns on your worksheet before calling a contractor back:
+    </p>
+    <ul>
+      <li><strong>Compute the yearly flip threshold first:</strong> Subtract the repair quote from the installed replacement quote, then divide by the years you plan to keep the home: <code>(Replacement − Repair) ÷ Years</code>. That dollar figure tells you how much combined annual future repair plus extra electricity cost the old unit would need to incur every year for replacement to break even. On a 1-year or 2-year stay, that required yearly savings often exceeds $4,000–$8,000 per year—explaining why short stays tolerate larger non-safety repairs even when Check A fires.</li>
+      <li><strong>Avoid double-counting age risk in optional inputs:</strong> If you only enter known baseline bills and avoid inflating speculative repair estimates, Checks A, B, C, and D stay transparent. Whenever Check C (R-22 over 12 years) fires on a long stay, weigh whether reclaimed R-22 costs and expired parts availability justify replacing once rather than paying twice (<a href="/guides/how-to-vet-hvac-contractor/">verify bids via Manual J</a>).</li>
+    </ul>
+
+    <h2>Run All Four Checks on Your Own Quote</h2>
+    <p>
+      Enter your exact repair quote, installed replacement bid, age, refrigerant, and stay horizon in the <a href="/">calculator</a> to inspect the exact dollar flip condition.
     </p>
   </article>
 </BaseLayout>

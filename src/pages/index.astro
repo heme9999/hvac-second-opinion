@@ -1,6 +1,6 @@
 ---
 import Calculator from '../components/Calculator.astro';
-import { GUIDES, SITE } from '../config/site';
+import { GUIDES, OFFICIAL_SOURCES, SITE } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -110,10 +110,24 @@ const faqSchema = {
         </p>
       </div>
     </div>
+
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-01-decision-matrix.svg"
+        alt="Diagram of Form HSO-01 decision logic showing Checks A, B, C, and D plus the 1 to 2 year short-stay override."
+        width="820"
+        height="340"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 01: Deterministic 4-check gate used by Form HSO-01, including the 1–2 year short-stay exception when Check D saves net cash without exceeding the 50% rule.
+      </figcaption>
+    </figure>
   </section>
 
   <section aria-labelledby="ref-benchmarks-heading">
-    <h2 id="ref-benchmarks-heading">Verified Federal Reference Numbers (DOE, EPA, IRS)</h2>
+    <h2 id="ref-benchmarks-heading">Verified Federal Reference Numbers (DOE, EPA, IRS, DSIRE)</h2>
     <div tabindex="0" role="region" aria-labelledby="ref-table-caption" class="table-wrapper">
       <table class="estimate-table">
         <caption id="ref-table-caption">2026 Homeowner Baseline Standards &amp; Regulatory Cutoffs</caption>
@@ -121,39 +135,44 @@ const faqSchema = {
           <tr>
             <th>Topic</th>
             <th>Verified Rule / Threshold</th>
-            <th>Source</th>
+            <th>Primary Source</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <th scope="row">Split AC Minimum (North)</th>
             <td class="tabular">13.4 SEER2 (effective Jan 1, 2023)</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">Split AC Minimum (SE / SW)</th>
             <td class="tabular">14.3 SEER2 (&lt;45k Btu/h) / 13.8 SEER2 (≥45k Btu/h)</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">Split Heat Pump Minimum</th>
             <td class="tabular">14.3 SEER2 / 7.5 HSPF2 nationwide</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">ENERGY STAR Heat Pump</th>
-            <td class="tabular">15.2 SEER2 / 7.8 HSPF2 (version 6.1)</td>
-            <td>ENERGY STAR</td>
+            <td class="tabular">15.2 SEER2 / 7.8 HSPF2 (Version 6.1)</td>
+            <td><a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR Criteria</a></td>
           </tr>
           <tr>
             <th scope="row">R-22 Production &amp; Import</th>
-            <td>Banned Jan 1, 2020 (new equipment banned since 2010)</td>
-            <td>U.S. EPA</td>
+            <td>Banned Jan 1, 2020 (new equipment banned since 2010); <a href={OFFICIAL_SOURCES.epaAim} target="_blank" rel="noopener noreferrer">AIM Act</a> covers R-410A phasedown</td>
+            <td><a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">U.S. EPA ODS Phaseout</a></td>
           </tr>
           <tr>
             <th scope="row">Federal 25C Tax Credit</th>
             <td>Expired Dec 31, 2025 (not available for 2026 installs)</td>
-            <td>IRS</td>
+            <td><a href={OFFICIAL_SOURCES.irs25c} target="_blank" rel="noopener noreferrer">IRS Section 25C</a></td>
+          </tr>
+          <tr>
+            <th scope="row">State &amp; Utility Rebates</th>
+            <td>Active local incentives vary by ZIP code and AHRI match</td>
+            <td><a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE Database</a></td>
           </tr>
         </tbody>
       </table>

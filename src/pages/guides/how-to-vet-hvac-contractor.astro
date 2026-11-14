@@ -1,10 +1,43 @@
 ---
+import { OFFICIAL_SOURCES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'Why does an ACCA Manual J calculation matter more than tonnage per square foot?',
+    answer:
+      'Insulated attics, window shading, air tightness, and local humidity alter real heating and cooling loads dramatically. Rule-of-thumb oversizing causes 6-to-8-minute short cycles, clammy indoor air, and early compressor wear.',
+  },
+  {
+    question: 'Does a 10-year manufacturer warranty pay for technician labor and refrigerant?',
+    answer:
+      'Usually no. Standard factory warranties cover only defective replacement parts when registered promptly; diagnostic labor, brazing, refrigerant, and crane fees remain out-of-pocket unless backed by a written contractor labor warranty.',
+  },
+  {
+    question: 'How should I check 2026 HVAC rebates claimed by a contractor?',
+    answer:
+      'Do not rely on expired federal IRS Section 25C credits for 2026 installations. Verify local electric utility or state rebates directly through DSIRE using the quoted AHRI Certified Reference Number.',
+  },
+] as const;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="How to Vet an HVAC Contractor: Manual J & Licenses | HVAC Second Opinion"
   description="Vetting checklist for US homeowners: verify state licensing, EPA 608 certification, ACCA Manual J load calculations, written itemized bids, and labor warranties."
+  structuredData={faqSchema}
 >
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/">Calculator</a> / <a href="/guides/">Guides</a> / <span>How to Vet an HVAC Contractor</span>
@@ -13,68 +46,92 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <article class="prose">
     <h1>How to Vet an HVAC Contractor Before You Sign</h1>
     <p class="intro-lead">
-      Industry technicians frequently point out that the installation day matters just as much as the brand badge on the outdoor condenser. A top-tier unit bolted onto leaking ducts without a load calculation or nitrogen purge will fail early—while a modest baseline unit installed by a thorough contractor can run quietly for 15+ years.
+      Installation quality determines system lifespan just as much as the brand badge outside. A top-tier unit bolted onto leaking ducts without an ACCA load calculation or nitrogen purge will fail early—while a code-minimum <a href="/guides/seer2-explained/">SEER2 system</a> installed by a thorough crew runs cleanly for 15+ years.
     </p>
 
-    <h2>1. Verify Active State License, Insurance, and EPA 608</h2>
-    <p>
-      Start with credentials you can verify independently in five minutes rather than trusting yard signs or review stars:
-    </p>
+    <h2>1. Verify State License, Insurance, and EPA 608</h2>
     <ul>
-      <li><strong>State and local mechanical contractor license:</strong> Most states and large municipalities publish a public license lookup portal showing whether the license is active and free of unresolved disciplinary complaints.</li>
-      <li><strong>General liability and workers’ compensation insurance:</strong> Ask for a certificate of insurance listing your name or verify coverage directly with the carrier. Never let an uninsured crew lift heavy compressors or work with 240V circuits in your attic.</li>
-      <li><strong>EPA Section 608 Certification:</strong> Any technician handling or recovering regulated refrigerants (including R-22, R-410A, R-454B, or R-32) must hold federal EPA Section 608 certification.</li>
+      <li><strong>Active mechanical license:</strong> Check your state or city licensing board lookup portal for active standing and unresolved complaints.</li>
+      <li><strong>Liability &amp; workers’ compensation:</strong> Request a certificate of insurance directly rather than accepting verbal assurances.</li>
+      <li><strong>EPA Section 608 Certification:</strong> Required by <a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">EPA regulations</a> for any technician handling R-22, R-410A, R-454B, or R-32 refrigerant.</li>
     </ul>
 
-    <h2>2. Demand an ACCA Manual J Load Calculation (Reject Rule-of-Thumb Sizing)</h2>
+    <h2>2. Demand an ACCA Manual J Load Calculation</h2>
     <p>
-      If a salesperson steps inside your foyer for three minutes, notes your house is 2,000 square feet, and immediately quotes a 4-ton air conditioner using a “500 square feet per ton” shortcut, stop right there.
-    </p>
-    <p>
-      Proper equipment sizing requires an <strong>ACCA Manual J</strong> heat-gain and heat-loss calculation. Manual J measures your home’s actual envelope: window orientation and glazing, attic insulation depth, air leakage, local climate design temperatures, and duct location.
+      If a salesperson glances around your living room for three minutes and quotes a 4-ton unit using a “500 sq ft per ton” shortcut, pause immediately. Proper equipment sizing requires a room-by-room <strong>ACCA Manual J</strong> load calculation measuring roof and wall insulation R-values, window orientation and solar heat gain, air infiltration rates, local summer/winter design temperatures, and whether ducts run through unconditioned attics.
     </p>
     <ul>
-      <li><strong>Why oversizing hurts you:</strong> A system that is half a ton or one ton too large blasts cold air quickly and shuts off in 6 to 8 minutes (“short-cycling”). Because air conditioners remove humidity only after running long enough to cool the indoor coil thoroughly, short-cycling leaves your home cold, clammy, and prone to premature compressor wear.</li>
-      <li><strong>Also ask about Manual S and Manual D:</strong> Manual S matches equipment capacity to the Manual J load using manufacturer expanded performance data, while Manual D verifies whether your existing ductwork can physically carry the required airflow (CFM) without choking static pressure.</li>
+      <li><strong>Why oversizing hurts comfort and lifespan:</strong> Installing a system half a ton or one ton too large blasts cold air for 6 to 8 minutes and shuts off (“short-cycling”). Because air conditioners need steady run cycles to wring moisture out of the indoor evaporator coil, oversized equipment leaves homes clammy while stressing compressor start windings.</li>
+      <li><strong>Pair Manual J with Manual S and Manual D:</strong> Manual S selects exact equipment capacity at your local design temperature, while Manual D and a return static-pressure test confirm existing sheet-metal or flex ducts can move the required airflow without choking blower motors.</li>
     </ul>
 
-    <h2>3. Require a Written, Itemized Quote With AHRI Reference Numbers</h2>
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-06-manual-j-duct-static.svg"
+        alt="Comparison of Bid 1 ($8,400 oversized 4-ton guess), Bid 2 ($9,900 ACCA Manual J 3-ton match), and Bid 3 ($13,600 variable upsell)."
+        width="820"
+        height="330"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 06: Evaluating three competing replacement quotes—why Bid 2 ($9,900 Manual J match) beats both an oversized cheap bid and an overbuilt upsell.
+      </figcaption>
+    </figure>
+
+    <h2>3. Require an Itemized Bid With AHRI Numbers</h2>
     <p>
-      Never sign a one-line lump-sum estimate. Ask each bidder for a written manifest listing exact outdoor condenser and indoor coil/air handler model numbers along with the <strong>AHRI Certified Reference Number</strong>. That number proves the indoor and outdoor components are tested together and meet DOE 10 CFR 430.32 regional SEER2/HSPF2 minimums. See <a href="/guides/how-to-read-hvac-quote/">our line-by-line quote reading guide</a> for the five items most often omitted from cheap bids.
+      Insist on exact indoor coil and outdoor condenser model numbers plus an <strong>AHRI Certified Reference Number</strong> confirming compliance with <a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE 10 CFR 430.32</a> regional standards. Review <a href="/guides/how-to-read-hvac-quote/">our line-by-line quote audit guide</a> to catch omitted permits, line sets, and plenum transitions.
     </p>
 
     <h2>4. Separate Equipment Parts Warranty From Labor Warranty</h2>
-    <p>
-      Nearly every major residential brand offers a 10-year limited parts warranty once registered within 60–90 days of installation. That warranty covers only the replacement part shipped from a distributor—not the diagnostic trip, brazing labor, refrigerant recharge, or crane/attic hoist fee.
-    </p>
     <ul>
-      <li>Ask how many years of <strong>labor warranty</strong> the contractor provides in writing (1 year is common baseline; 2–5 years shows higher confidence in install quality).</li>
-      <li>Confirm whether the contractor registers the equipment on your behalf and sends you the confirmation PDF, or whether registration is left to you.</li>
-      <li>For <strong>repairs</strong>, ask explicitly: “If this repair fails again within 6 to 12 months, what warranty covers the part and return labor?”</li>
+      <li>Confirm in writing how long the <strong>contractor labor warranty</strong> runs, including what happens if a brazed joint leaks or a new drain clogs during the first cooling or heating season.</li>
+      <li>Ask who submits the manufacturer limited parts warranty registration by the brand’s startup deadline (unregistered units often receive shorter default coverage terms), and ask for the confirmation receipt PDF for your house records.</li>
+      <li>For service calls (<a href="/guides/signs-your-hvac-is-dying/">comparing repair vs. dying signs</a>), confirm upfront whether diagnostic fees credit toward repair and whether a 6-to-12-month workmanship guarantee covers follow-up visits if the part fails again.</li>
+      <li>Pair warranty terms with Checks A through D in <a href="/guides/5000-rule/">our threshold guide</a> whenever repair costs climb past a few hundred dollars.</li>
     </ul>
 
-    <h2>5. Check Local Utility Rebates via DSIRE (Without Counting on Expired 25C)</h2>
+    <h2>5. Verify 2026 Rebates on DSIRE Without Expired 25C Assumptions</h2>
     <p>
-      Because the federal Section 25C Energy Efficient Home Improvement Credit expired for property placed in service after December 31, 2025 (IRS), do not let a salesperson discount a bid in your head with an expired $2,000 federal tax credit claim. Instead, verify any active electric utility or state rebates through <strong>DSIRE</strong> and require the contractor to confirm in writing that the quoted AHRI system qualifies (for example, meeting ENERGY STAR 15.2 SEER2 / 7.8 HSPF2 thresholds if your utility requires ENERGY STAR).
+      Because <a href={OFFICIAL_SOURCES.irs25c} target="_blank" rel="noopener noreferrer">IRS Section 25C federal credits</a> expired after December 31, 2025, verify any utility or state rebates through <a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE</a> and confirm in writing whether <a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR (15.2 SEER2 / 7.8 HSPF2)</a> AHRI thresholds apply.
     </p>
 
-    <h2>Worked Example: Comparing Two Bids Using This Checklist</h2>
+    <h2>Worked Example: Comparing Three Bids Using This Checklist</h2>
     <div class="worked-example">
       <p>
-        Suppose you currently have an aging 3.5-ton AC and get three replacement quotes:
+        A homeowner replacing a failing 3.5-ton AC gathers three replacement bids after adding attic insulation:
       </p>
       <ul>
-        <li><strong>Bid 1 ($8,400):</strong> Recommends bumping up to a 4-ton unit “just to be safe on hot days.” No Manual J run, refuses to pull a city permit unless you pay extra, 1-year labor warranty.</li>
-        <li><strong>Bid 2 ($9,900):</strong> Runs a Manual J calculation showing your actual cooling load is 31,800 Btu/h (2.65 tons) after you upgraded attic insulation five years ago—recommends a properly matched <strong>3-ton</strong> 15.2 SEER2 system, measures static pressure on your return duct, includes a new line set, city permit, EPA 608 recovery, and 2-year labor warranty.</li>
+        <li><strong>Bid 1 ($8,400):</strong> Skips Manual J and quotes a 4-ton unit “for hot August afternoons,” excludes municipal permit fees, and includes a 1-year labor warranty.</li>
+        <li><strong>Bid 2 ($9,900):</strong> Completes a Manual J showing true peak cooling load of 31,800 Btu/h (2.65 tons), measures return duct static pressure, matches a <strong>3-ton</strong> 15.2 SEER2 system with AHRI certificate, includes municipal permits, EPA 608 recovery, new line set, and a 2-year labor warranty.</li>
+        <li><strong>Bid 3 ($13,600):</strong> Runs Manual J matching 3 tons, pitches an 18.5 SEER2 variable-speed unit by counting an expired $2,000 federal 25C tax credit and claiming only ~$80/yr extra utility savings over Bid 2 ($3,700 premium = 46-year payback).</li>
       </ul>
       <p style="margin-bottom: 0;">
-        <strong>Why Bid 2 wins despite costing $1,500 more upfront:</strong> Installing an oversized 4-ton system (Bid 1) on ducts built for 3–3.5 tons creates noisy airflow, high static pressure, poor summer dehumidification, and shortened compressor life. Bid 2’s Manual J sizing matches actual load and protects both comfort and equipment longevity.
+        <strong>Why Bid 2 wins cleanly:</strong> Bid 1 oversizes 3-ton ducts, triggering noisy airflow, short-cycling, and high humidity; Bid 3 relies on an expired tax credit for minimal extra bill savings. Bid 2 delivers verified Manual J sizing and full code-compliant scope at $9,900.
       </p>
     </div>
 
     <h2>Three Questions to Take to Every Appointment</h2>
+    <ol>
+      <li><strong>“Is this quote fully itemized—including permits, EPA 608 recovery, thermostat cable, plenum transitions, and a new line set?”</strong></li>
+      <li><strong>“Did you perform a room-by-room ACCA Manual J load calculation and static-pressure check, and what AHRI number proves the system match?”</strong></li>
+      <li><strong>“What warranty covers technician labor on this repair or install—if the same issue returns within 6 to 12 months, what is my out-of-pocket cost?”</strong></li>
+    </ol>
     <p>
-      Ready to call a technician back? Plug your numbers into the <a href="/">HVAC Repair or Replace Calculator</a> to generate your tailored 3-question contractor sheet automatically based on your refrigerant, stay horizon, and quote ratio.
+      Run your competing repair and replacement figures through the <a href="/">HVAC Repair or Replace Calculator</a> to generate tailored questions automatically.
     </p>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
   </article>
 </BaseLayout>

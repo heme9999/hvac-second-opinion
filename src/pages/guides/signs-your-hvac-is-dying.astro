@@ -1,10 +1,43 @@
 ---
+import { OFFICIAL_SOURCES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'When does a cracked heat exchanger require shutting off a furnace immediately?',
+    answer:
+      'Immediately. A cracked or rusted heat exchanger can leak carbon monoxide into indoor supply air. Shut down the furnace and contact a licensed HVAC technician or gas utility at once; safety hazards override any dollar rule.',
+  },
+  {
+    question: 'Are capacitors, contactors, and flame sensors worth repairing on an older HVAC unit?',
+    answer:
+      'Usually yes. Those wear items cost a small fraction of a new system, require zero refrigerant work, and rarely justify condemning a healthy R-410A unit—especially when Checks B and D confirm repairing saves thousands.',
+  },
+  {
+    question: 'Why does an R-22 evaporator coil leak usually lean replace over age 12?',
+    answer:
+      'EPA banned virgin R-22 production on January 1, 2020, leaving scarce reclaimed refrigerant while the remaining 13+ year old outdoor compressor and coils stay out of warranty.',
+  },
+] as const;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="Signs Your HVAC Is Dying vs. Worth One More Repair | HVAC Second Opinion"
   description="Tell immediate HVAC safety hazards and terminal compressor or coil failures apart from cheap wear-part repairs like capacitors, contactors, and sensors."
+  structuredData={faqSchema}
 >
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/">Calculator</a> / <a href="/guides/">Guides</a> / <span>Signs Your HVAC Is Dying</span>
@@ -13,90 +46,116 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <article class="prose">
     <h1>Signs Your HVAC System Is Dying vs. Worth One More Repair</h1>
     <p class="intro-lead">
-      A system that stops blowing cold air in July or cold heat in January does not automatically need a $10,000 replacement. Many breakdowns trace back to $200–$500 electrical wear items, while a smaller group of failures signal genuine end-of-life or immediate safety risk.
+      A breakdown during peak summer or freezing winter does not automatically require a $10,000 system replacement. Many sudden shutdowns stem from $200–$500 electrical or sensor wear items, while a smaller group indicate safety risks or true end-of-life failures.
     </p>
 
     <h2>Group 1: Immediate Safety Issues (Never Delay)</h2>
     <p>
-      Safety overrides any repair-vs-replace dollar ratio. Shut the system down and call a licensed HVAC professional or gas utility immediately if you face any of the following:
+      Safety always overrides financial ratios in the <a href="/">calculator</a>. Shut the equipment down and call a licensed HVAC pro or gas utility immediately for:
     </p>
     <ul>
-      <li><strong>Cracked gas furnace heat exchanger or CO alarm activation:</strong> A cracked or corroded heat exchanger can leak carbon monoxide (CO) into supply air. On older furnaces outside heat-exchanger warranty, heat-exchanger replacement labor often approaches a new furnace cost, making replacement the safer choice.</li>
-      <li><strong>Repeated tripped breakers, scorched wiring, or burning electrical odors:</strong> Shorted compressor windings or melting terminal lugs create electrical fire hazards and typically indicate severe compressor stress.</li>
-      <li><strong>Active gas leaks or blocked flue venting:</strong> Improper combustion exhaust or damaged flue pipes require immediate red-tag shutdown and licensed repair before running the furnace again.</li>
+      <li><strong>Cracked gas heat exchanger or CO alarm trip:</strong> Carbon monoxide leaks into supply air pose severe health hazards; outside heat-exchanger warranty coverage, replacement is normally required.</li>
+      <li><strong>Tripped breakers, scorched wiring, or electrical burning odor:</strong> Shorted compressor windings or melted lugs indicate fire hazards and internal mechanical stress.</li>
+      <li><strong>Active gas leaks or blocked exhaust flues:</strong> Combustible gas odors or corroded vents require immediate red-tag isolation.</li>
     </ul>
 
-    <h2>Group 2: Terminal or High-Risk Failures (Strong Lean Replace on Older Units)</h2>
-    <p>
-      When a component fails that accounts for a large share of total equipment cost—or relies on phased-out refrigerant—replacing older systems usually makes more financial sense:
-    </p>
+    <h2>Group 2: Terminal or High-Risk Failures (Strong Lean Replace Over Age 12)</h2>
     <ul>
-      <li><strong>Failed compressor out of warranty:</strong> The compressor is the heart of your outdoor condenser or heat pump. Replacing a burned-out compressor on a unit over 10–12 years old routinely costs several thousand dollars while leaving an aged outdoor coil, fan motor, and indoor coil untouched.</li>
-      <li><strong>Major R-22 refrigerant leak:</strong> Because EPA banned virgin R-22 production and import on January 1, 2020, repairing an R-22 coil leak or recharging an R-22 system older than 12 years triggers our calculator’s hard replacement flag.</li>
-      <li><strong>Simultaneous indoor coil and blower/board failures:</strong> When a system over 12–15 years old suffers back-to-back major repairs within 12 months, future repair expectations climb rapidly.</li>
+      <li><strong>Out-of-warranty burned-out compressor:</strong> Swapping a failed compressor past age 10–12 costs thousands while leaving an old indoor coil, fan motor, and ductwork untouched.</li>
+      <li><strong>Major R-22 refrigerant leak:</strong> Because <a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">U.S. EPA banned virgin R-22</a> on January 1, 2020, costly coil leaks past age 12 trigger Check C (<a href="/guides/r22-refrigerant/">read our R-22 phase-out guide</a>).</li>
+      <li><strong>Stacking major repairs plus efficiency losses:</strong> Multiple board/motor failures alongside rising bills mean cumulative repair spend approaches a <a href="/guides/seer2-explained/">DOE-compliant SEER2 upgrade</a>.</li>
     </ul>
+
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-07-triage-diagnostic-tree.svg"
+        alt="Diagnostic schematic separating Group 1 Safety Shutdowns, Group 2 Terminal Failures, and Group 3 Routine Wear Parts with worked examples."
+        width="820"
+        height="330"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 07: Symptom triage matrix separating immediate safety shutdowns and terminal R-22/compressor failures from routine electrical wear parts.
+      </figcaption>
+    </figure>
 
     <h2>Group 3: Routine Wear Parts (Usually Worth Repairing)</h2>
-    <p>
-      If your system runs on R-410A (or R-32), is under 12–14 years old, and has no history of chronic leaks, these common breakdowns rarely justify full replacement:
-    </p>
-
     <div tabindex="0" role="region" aria-label="Common HVAC wear parts vs terminal failures" class="table-wrapper">
       <table class="estimate-table">
         <thead>
           <tr>
             <th>Symptom / Part</th>
-            <th>Why It Happens</th>
+            <th>Why It Fails</th>
             <th>Typical Repair vs. Replace Lean</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <th scope="row">Dual run capacitor</th>
-            <td>Heat and voltage spikes wear out the outdoor capacitor that starts the fan and compressor.</td>
-            <td>Almost always <strong>repair</strong> — minor electrical wear item even at age 10+.</td>
+            <td>Heat and voltage surges degrade the start/run capacitor.</td>
+            <td>Almost always <strong>repair</strong> — minor wear part even past age 10.</td>
           </tr>
           <tr>
             <th scope="row">Contactor or relay switch</th>
-            <td>Pitted electrical contacts prevent 240V power from reaching the outdoor unit.</td>
-            <td>Almost always <strong>repair</strong> — inexpensive standalone switch.</td>
+            <td>Pitted 240V contacts block compressor/fan power.</td>
+            <td>Almost always <strong>repair</strong> — low-cost isolated switch.</td>
           </tr>
           <tr>
-            <th scope="row">Clogged condensate drain / float switch</th>
-            <td>Algae buildup trips the overflow float switch and shuts off cooling to protect ceilings.</td>
-            <td><strong>Repair / clean</strong> — zero mechanical wear on the AC itself.</td>
+            <th scope="row">Clogged drain / float switch</th>
+            <td>Algae buildup trips safety float switch to stop water damage.</td>
+            <td><strong>Repair / flush</strong> — zero compressor or coil wear.</td>
           </tr>
           <tr>
-            <th scope="row">Flame sensor or hot surface igniter</th>
-            <td>Furnace lights briefly then shuts down due to soot or brittle silicon nitride igniter.</td>
-            <td><strong>Repair</strong> — standard maintenance wear part on gas furnaces.</td>
+            <th scope="row">Flame sensor or igniter</th>
+            <td>Soot or brittle silicon nitride igniter stops furnace ignition.</td>
+            <td><strong>Repair</strong> — standard periodic furnace service item.</td>
           </tr>
           <tr>
-            <th scope="row">Inducer motor or PSC blower motor</th>
-            <td>Bearings wear out after 8–12 years of daily airflow cycles.</td>
-            <td>Check with calculator — usually <strong>repair</strong> on healthy R-410A units unless paired with a cracked heat exchanger.</td>
+            <th scope="row">Inducer or PSC blower motor</th>
+            <td>Bearing wear after 8–12 years of daily heating/cooling cycles.</td>
+            <td>Verify via <a href="/guides/5000-rule/">50% &amp; $5,000 rules</a> — usually <strong>repair</strong> on healthy R-410A rigs.</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <h2>Worked Example: Two Calls on the Same Hot Week</h2>
+    <h2>Worked Example: Reproducible Calculator Inputs for Two Same-Week Calls</h2>
     <div class="worked-example">
       <p>
-        Compare two homeowners whose air conditioning stopped cooling on the same afternoon:
+        Enter these exact figures into the <a href="/">calculator</a> to verify both scenarios line by line:
       </p>
       <ul>
-        <li><strong>Homeowner A (9-year-old R-410A split AC):</strong> Outdoor fan isn’t spinning; tech diagnoses a swollen dual run capacitor and pitted contactor, quoting <strong>$360</strong> for repair and pitching a <strong>$9,500</strong> replacement “since it’s almost 10 years old.” Check A = <code>9 × $360 = $3,240</code> (under $5,000), Check B = <code>3.8%</code> (under 50%), Check C = clear, and 5-year holding cost favors repairing by over $8,000. <strong>Clear Repair.</strong></li>
-        <li><strong>Homeowner B (15-year-old R-22 split AC):</strong> Indoor coil is corroded and leaking, compressor amperage spikes above locked-rotor specs, and the tech quotes <strong>$3,200</strong> to swap the coil and recharge reclaimed R-22 versus <strong>$10,400</strong> for a full matched replacement. Check A = <code>15 × $3,200 = $48,000</code>, Check C = fired (age &gt; 12 + R-22), and the outdoor compressor is already showing electrical stress. <strong>Clear Replace.</strong></li>
+        <li><strong>Homeowner A (9-yr R-410A wear repair):</strong> Repair quote = <strong>$360</strong> (capacitor + contactor), Replacement quote = <strong>$9,500</strong>, Age = <strong>9</strong>, Refrigerant = <strong>R-410A</strong>, Stay = <strong>5 years</strong>, Expected future annual repairs = <strong>$150/yr</strong>, Expected energy savings = <strong>$100/yr</strong>. Check A = <code>9 × $360 = $3,240</code> (clear), Check B = <code>3.8%</code> (clear), Check C = clear, Check D = Repair total <code>$360 + (5 × $150) = $1,110</code> vs. Replace net <code>$9,500 − (5 × $100) = $9,000</code> — repairing saves <strong>$7,890</strong> (or <strong>$9,140</strong> with optional fields left at $0). Verdict: <strong>Lean Repair</strong>.</li>
+        <li><strong>Homeowner B (15-yr R-22 coil failure):</strong> Repair quote = <strong>$3,200</strong> (coil + reclaimed R-22), Replacement quote = <strong>$10,400</strong>, Age = <strong>15</strong>, Refrigerant = <strong>R-22</strong>, Stay = <strong>5 years</strong>, Expected future annual repairs = <strong>$500/yr</strong>, Expected energy savings = <strong>$250/yr</strong>. Check A = <code>15 × $3,200 = $48,000</code> (fires), Check C = fired (age &gt; 12 + R-22), Check D = Repair total <code>$5,700</code> vs. Replace net <code>$9,150</code>. With an aging compressor already pulling high amperage, sinking $3,200 into obsolete R-22 triggers <strong>Lean Replace</strong>.</li>
       </ul>
     </div>
 
-    <h2>Don’t Guess Under Summer or Winter Pressure</h2>
+    <h2>How to Verify a “Condemned System” Claim on Site</h2>
     <p>
-      Emergency repair visits happen in the worst weather, which makes it tempting to say yes to the first option offered. Take five minutes to get a written diagnosis naming the exact failed part, ask whether a standard 1-year or 2-year parts-and-labor warranty backs that repair, and check the outdoor nameplate for both the manufacture year and refrigerant stamp before making a commitment.
+      High-pressure emergency calls on July weekends or sub-freezing nights create fertile ground for rushed replacements. Before agreeing to condemn an entire unit, ask the technician to document concrete measurements directly on your invoice or photo report:
     </p>
+    <ul>
+      <li><strong>Electrical readings for wear parts:</strong> For a failed capacitor or weak blower motor, ask to see the microfarad meter reading compared directly against the capacitor’s stamped specification (typically ±5%–10% tolerance) or motor winding amp draw against nameplate FLA.</li>
+      <li><strong>Visual evidence for heat exchangers or leaks:</strong> For cracked gas heat exchangers, request dated borescope photos from your actual furnace rather than generic stock illustrations, or step outside to view electronic leak-detector confirmation on oily R-22 evaporator coils (<a href="/guides/r22-refrigerant/">review R-22 economics</a>).</li>
+      <li><strong>Get a second diagnostic opinion before big spend:</strong> Paying a second licensed HVAC company a standard diagnostic service call is inexpensive insurance against replacing an entire $9,500–$10,400 system when the root problem is an isolated electrical switch or condensate drain fault.</li>
+    </ul>
+
+    <h2>Before Approving Emergency Work</h2>
     <p>
-      Once you have those facts in hand, enter both numbers into our <a href="/">HVAC Repair or Replace Calculator</a>, review <a href="/guides/5000-rule/">our guide to the $5,000 and 50% rules</a>, and inspect <a href="/guides/how-to-read-hvac-quote/">what a complete quote should list</a> so you separate genuine end-of-life mechanical failures from sales pressure. If the repair requires a full replacement quote, verify contractor credentials and ACCA Manual J sizing using <a href="/guides/how-to-vet-hvac-contractor/">our contractor vetting guide</a>.
+      Ask for a written diagnosis naming the exact failed component and its repair warranty before signing, review <a href="/guides/how-to-read-hvac-quote/">our complete quote checklist</a>, and check credentials using <a href="/guides/how-to-vet-hvac-contractor/">our contractor vetting guide</a>.
     </p>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
   </article>
 </BaseLayout>

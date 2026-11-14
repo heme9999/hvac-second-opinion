@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" role="img" aria-labelledby="fig03-title fig03-desc">
+  <title id="fig03-title">Figure 03: Repair Quote Limits Under the $5,000 Rule vs. 50% Rule</title>
+  <desc id="fig03-desc">Chart comparing the $5,000 rule repair ceiling ($5,000 divided by age) across unit ages 5 to 18 against a $10,000 replacement 50% threshold ($5,000 flat) and showing worked examples.</desc>
+  <rect width="820" height="330" fill="#FAF7F2" stroke="#1F2937" stroke-width="2" />
+  <rect x="0" y="0" width="820" height="34" fill="#1F2937" />
+  <text x="16" y="22" fill="#FAF7F2" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" font-weight="700">FIG 03 · $5,000 RULE CEILING VS. 50% REPLACEMENT THRESHOLD</text>
+  <text x="804" y="22" fill="#C2410C" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">$10,000 REPLACE BASE</text>
+
+  <!-- Chart Grid Area -->
+  <rect x="85" y="56" width="465" height="215" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5" />
+  <!-- Horizontal Grid Lines -->
+  <line x1="85" y1="92" x2="550" y2="92" stroke="#D5CFC2" stroke-width="1" />
+  <line x1="85" y1="138" x2="550" y2="138" stroke="#D5CFC2" stroke-width="1" />
+  <line x1="85" y1="184" x2="550" y2="184" stroke="#D5CFC2" stroke-width="1" />
+  <line x1="85" y1="230" x2="550" y2="230" stroke="#D5CFC2" stroke-width="1" />
+
+  <!-- Y Axis Labels -->
+  <text x="76" y="96" text-anchor="end" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">$5,000</text>
+  <text x="76" y="142" text-anchor="end" fill="#4B5563" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">$2,500</text>
+  <text x="76" y="188" text-anchor="end" fill="#4B5563" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">$1,000</text>
+  <text x="76" y="234" text-anchor="end" fill="#4B5563" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">$500</text>
+  <text x="76" y="271" text-anchor="end" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">$0</text>
+
+  <!-- 50% Rule Flat Line ($5,000 on $10k replace) -->
+  <line x1="85" y1="92" x2="550" y2="92" stroke="#166534" stroke-width="2.5" stroke-dasharray="7 4" />
+  <text x="330" y="83" fill="#166534" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">50% RULE LINE ($5,000 ON $10,000 SYSTEM)</text>
+
+  <!-- $5,000 Rule Curve Bars at Ages 4, 8, 10, 14, 18 -->
+  <!-- Age 4: $1,250 -->
+  <rect x="115" y="172" width="52" height="99" fill="#F2ECE1" stroke="#1F2937" stroke-width="1.5" />
+  <text x="141" y="164" text-anchor="middle" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">$1,250</text>
+  <text x="141" y="288" text-anchor="middle" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">Age 4</text>
+
+  <!-- Age 8: $625 -->
+  <rect x="200" y="220" width="52" height="51" fill="#F2ECE1" stroke="#1F2937" stroke-width="1.5" />
+  <text x="226" y="212" text-anchor="middle" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">$625</text>
+  <text x="226" y="288" text-anchor="middle" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">Age 8</text>
+
+  <!-- Age 10: $500 -->
+  <rect x="285" y="230" width="52" height="41" fill="#FFF4ED" stroke="#C2410C" stroke-width="2" />
+  <text x="311" y="222" text-anchor="middle" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">$500</text>
+  <text x="311" y="288" text-anchor="middle" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">Age 10</text>
+
+  <!-- Age 14: $357 -->
+  <rect x="370" y="242" width="52" height="29" fill="#FFF4ED" stroke="#C2410C" stroke-width="1.5" />
+  <text x="396" y="234" text-anchor="middle" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">$357</text>
+  <text x="396" y="288" text-anchor="middle" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">Age 14</text>
+
+  <!-- Age 18: $278 -->
+  <rect x="455" y="249" width="52" height="22" fill="#FFF4ED" stroke="#C2410C" stroke-width="1.5" />
+  <text x="481" y="241" text-anchor="middle" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">$278</text>
+  <text x="481" y="288" text-anchor="middle" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11">Age 18</text>
+
+  <!-- Right Annotation Box -->
+  <rect x="570" y="56" width="230" height="248" fill="#FFFFFF" stroke="#1F2937" stroke-width="2" />
+  <rect x="570" y="56" width="230" height="28" fill="#C2410C" />
+  <text x="582" y="75" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">WHY BOTH ARE SCREENS ONLY</text>
+  <text x="582" y="106" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12" font-weight="700">1. Inflation Squeeze:</text>
+  <text x="582" y="124" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">At age 10, a $680 repair fires</text>
+  <text x="582" y="140" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">Check A ($6,800) yet is only</text>
+  <text x="582" y="156" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">6.7% of a $10,200 replacement.</text>
+  <line x1="582" y1="170" x2="788" y2="170" stroke="#D5CFC2" stroke-width="1" />
+  <text x="582" y="190" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12" font-weight="700">2. R-22 Blind Spot:</text>
+  <text x="582" y="208" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">$2,800 coil + R-22 passes 50%</text>
+  <text x="582" y="224" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">rule (25.9%) yet fails Check C.</text>
+  <line x1="582" y1="238" x2="788" y2="238" stroke="#D5CFC2" stroke-width="1" />
+  <text x="582" y="258" fill="#1F2937" font-family="system-ui, sans-serif" font-size="12" font-weight="700">3. Short Stay Exception:</text>
+  <text x="582" y="276" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">1–2 yr stays raise repair limit</text>
+  <text x="582" y="292" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">when Check D keeps cash.</text>
+</svg>

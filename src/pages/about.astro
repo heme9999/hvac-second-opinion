@@ -1,4 +1,5 @@
 ---
+import { OFFICIAL_SOURCES } from '../config/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -26,7 +27,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <h2>Editorial Standards &amp; Fact-Checking</h2>
     <ul>
-      <li><strong>Every regulatory number checked one by one:</strong> Efficiency baselines (10 CFR 430.32 SEER2/HSPF2 minimums), ENERGY STAR thresholds (15.2 SEER2 / 7.8 HSPF2), EPA R-22 phase-out dates (2010 equipment ban, Jan 1, 2020 production/import ban, and AIM Act R-410A phasedown), and IRS Section 25C expiration after December 31, 2025 are verified directly against primary federal agency documents and named in each guide.</li>
+      <li><strong>Every regulatory number checked one by one:</strong> Efficiency baselines (<a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE 10 CFR 430.32</a> SEER2/HSPF2 minimums), <a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR</a> thresholds (15.2 SEER2 / 7.8 HSPF2), <a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">U.S. EPA R-22 phase-out dates</a> (2010 equipment ban, Jan 1, 2020 production/import ban), <a href={OFFICIAL_SOURCES.epaAim} target="_blank" rel="noopener noreferrer">EPA AIM Act</a> R-410A phasedown rules, <a href={OFFICIAL_SOURCES.irs25c} target="_blank" rel="noopener noreferrer">IRS Section 25C</a> expiration after December 31, 2025, and state/utility rebate pointers via <a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE</a> are verified directly against primary agency sources and named in each guide.</li>
       <li><strong>No invented statistics or scraped pricing tables:</strong> I do not fabricate regional average price charts, scrape proprietary databases, or claim a “guaranteed fair price.” Local labor rates, attic/crawlspace access, ductwork modifications, and permitting fees vary substantially across the United States.</li>
       <li><strong>No sponsored recommendations:</strong> HVAC Second Opinion accepts zero payments, affiliate commissions, or referral fees from HVAC manufacturers, lead brokers, or contractors. The site is built to be funded transparently by display advertising (such as Google AdSense), never by selling homeowner contact data.</li>
       <li><strong>Estimates, not professional diagnoses:</strong> All calculator outputs are financial comparison estimates only. Gas, electrical, combustion, and carbon-monoxide safety decisions always require an on-site inspection by a licensed professional.</li>

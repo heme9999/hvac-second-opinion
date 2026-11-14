@@ -1200,3 +1200,27 @@ table.estimate-table tr.row-fired {
   flex-wrap: wrap;
   gap: var(--space-4);
 }
+
+/* Technical Field-Manual Figures */
+figure.manual-figure {
+  margin: var(--space-4) 0;
+  border: 2px solid var(--rule);
+  background: #FFFFFF;
+  padding: var(--space-3);
+}
+
+figure.manual-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-2);
+}
+
+figure.manual-figure figcaption {
+  padding-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.45;
+}

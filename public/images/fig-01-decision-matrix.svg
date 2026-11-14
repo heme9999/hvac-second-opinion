@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 340" role="img" aria-labelledby="fig01-title fig01-desc">
+  <title id="fig01-title">Figure 01: HVAC Second Opinion 4-Check Decision Gate Flowchart</title>
+  <desc id="fig01-desc">Schematic showing Check A ($5,000 rule), Check B (50% rule), Check C (R-22 over 12 years), Check D (holding cost comparison), and how 1 to 2 year short stays adjust the final verdict.</desc>
+  <rect width="820" height="340" fill="#FAF7F2" stroke="#1F2937" stroke-width="2" />
+  <rect x="0" y="0" width="820" height="34" fill="#1F2937" />
+  <text x="16" y="22" fill="#FAF7F2" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" font-weight="700">FIG 01 · HVAC SECOND OPINION 4-CHECK DECISION GATE</text>
+  <text x="804" y="22" fill="#C2410C" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">FORM HSO-01</text>
+
+  <!-- 4 Checks Column -->
+  <rect x="20" y="54" width="235" height="58" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5" />
+  <text x="32" y="75" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">CHECK A · SCREEN</text>
+  <text x="32" y="96" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Age × Repair Quote &gt; $5,000?</text>
+
+  <rect x="20" y="122" width="235" height="58" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5" />
+  <text x="32" y="143" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">CHECK B · RATIO</text>
+  <text x="32" y="164" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Repair &gt; 50% of Replace?</text>
+
+  <rect x="20" y="190" width="235" height="58" fill="#FFF4ED" stroke="#C2410C" stroke-width="2" />
+  <text x="32" y="211" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">CHECK C · HARD FLAG</text>
+  <text x="32" y="232" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Age &gt; 12 AND R-22 System?</text>
+
+  <rect x="20" y="258" width="235" height="62" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5" />
+  <text x="32" y="279" fill="#166534" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">CHECK D · CASH MATH</text>
+  <text x="32" y="300" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">N-Year Holding Cost Winner</text>
+
+  <!-- Connectors -->
+  <line x1="255" y1="83" x2="310" y2="83" stroke="#1F2937" stroke-width="1.5" />
+  <line x1="255" y1="151" x2="310" y2="151" stroke="#1F2937" stroke-width="1.5" />
+  <line x1="255" y1="219" x2="310" y2="219" stroke="#C2410C" stroke-width="2" />
+  <line x1="255" y1="289" x2="310" y2="289" stroke="#166534" stroke-width="1.5" />
+  <line x1="310" y1="83" x2="310" y2="289" stroke="#1F2937" stroke-width="1.5" />
+  <line x1="310" y1="186" x2="355" y2="186" stroke="#1F2937" stroke-width="2" />
+
+  <!-- Horizon Gate Box -->
+  <rect x="355" y="102" width="190" height="168" fill="#F2ECE1" stroke="#1F2937" stroke-width="2" />
+  <text x="369" y="126" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">STAY HORIZON GATE</text>
+  <line x1="369" y1="136" x2="531" y2="136" stroke="#D5CFC2" stroke-width="1" />
+  <text x="369" y="158" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Standard Stay (3–20 yrs)</text>
+  <text x="369" y="177" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">2+ checks replace OR</text>
+  <text x="369" y="193" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">Check C -&gt; Lean Replace</text>
+  <line x1="369" y1="206" x2="531" y2="206" stroke="#D5CFC2" stroke-width="1" />
+  <text x="369" y="226" fill="#C2410C" font-family="system-ui, sans-serif" font-size="13" font-weight="700">Short Stay (1–2 yrs)</text>
+  <text x="369" y="244" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">If Check D saves cash &amp;</text>
+  <text x="369" y="260" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">Check B &lt;= 50% -&gt; Borderline</text>
+
+  <!-- Arrows to Verdicts -->
+  <line x1="545" y1="130" x2="590" y2="85" stroke="#C2410C" stroke-width="2" />
+  <line x1="545" y1="186" x2="590" y2="186" stroke="#1F2937" stroke-width="2" />
+  <line x1="545" y1="242" x2="590" y2="285" stroke="#166534" stroke-width="2" />
+
+  <!-- Three Verdict Boxes -->
+  <rect x="590" y="54" width="210" height="72" fill="#C2410C" stroke="#1F2937" stroke-width="1.5" />
+  <text x="604" y="79" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">VERDICT: LEAN REPLACE</text>
+  <text x="604" y="99" fill="#FAF7F2" font-family="system-ui, sans-serif" font-size="12">Check C (3+ yr stay) or</text>
+  <text x="604" y="115" fill="#FAF7F2" font-family="system-ui, sans-serif" font-size="12">2+ checks favor replace</text>
+
+  <rect x="590" y="150" width="210" height="72" fill="#FFFFFF" stroke="#1F2937" stroke-width="2" />
+  <text x="604" y="175" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">VERDICT: BORDERLINE</text>
+  <text x="604" y="195" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">1 of A/B/D fires, OR short stay</text>
+  <text x="604" y="211" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">cash savings vs. R-22 risk</text>
+
+  <rect x="590" y="246" width="210" height="72" fill="#166534" stroke="#1F2937" stroke-width="1.5" />
+  <text x="604" y="271" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">VERDICT: LEAN REPAIR</text>
+  <text x="604" y="291" fill="#ECFDF5" font-family="system-ui, sans-serif" font-size="12">Check C clear AND checks</text>
+  <text x="604" y="307" fill="#ECFDF5" font-family="system-ui, sans-serif" font-size="12">A, B, D all favor repair</text>
+</svg>

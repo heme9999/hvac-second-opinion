@@ -1,10 +1,43 @@
 ---
+import { OFFICIAL_SOURCES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'Is it still legal to repair and recharge an existing R-22 air conditioner?',
+    answer:
+      'Yes. While EPA banned virgin R-22 production and import on January 1, 2020, technicians may still service existing systems using recovered, recycled, or reclaimed R-22 stocks—though reclaimed refrigerant carries higher scarcity pricing.',
+  },
+  {
+    question: 'Why does Check C require both R-22 refrigerant and age over 12 years?',
+    answer:
+      'Because new R-22 equipment was banned in 2010, virtually all surviving R-22 systems are well past 12 years old. Combining obsolete refrigerant cost with aging compressors and coils creates high risk of back-to-back major repairs.',
+  },
+  {
+    question: 'Should I also panic-replace an 8-year-old R-410A unit because of the AIM Act?',
+    answer:
+      'No. Under the EPA AIM Act, HFC production caps transition new equipment to lower-GWP refrigerants like R-454B and R-32, but existing R-410A units remain serviceable for routine repairs.',
+  },
+] as const;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <BaseLayout
   title="R-22 Refrigerant Phase-Out: What It Means for Old AC | HVAC Second Opinion"
   description="EPA banned R-22 production and import on Jan 1, 2020. Learn how reclaimed R-22, the AIM Act R-410A phasedown, and R-454B/R-32 affect repair quotes."
+  structuredData={faqSchema}
 >
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/">Calculator</a> / <a href="/guides/">Guides</a> / <span>R-22 Refrigerant Phase-Out</span>
@@ -13,74 +46,101 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <article class="prose">
     <h1>What the R-22 Phase-Out Means for Your Old HVAC System</h1>
     <p class="intro-lead">
-      If a technician looks at your outdoor air conditioner or heat pump and points out that it runs on <strong>R-22</strong> (often sold under the legacy brand name Freon), your repair-vs-replace math changes immediately. That is why our calculator includes a dedicated hard flag whenever a system is over 12 years old and uses R-22.
+      When a technician checks your outdoor condenser nameplate and sees <strong>R-22</strong> (legacy HCFC-22, often branded Freon), repair-vs-replace math shifts sharply. That is why our calculator runs a dedicated hard flag whenever a system exceeds 12 years old and uses R-22.
     </p>
 
     <h2>Verified Federal Refrigerant Timeline (U.S. EPA)</h2>
     <div class="source-callout">
       <ul style="margin-bottom: 0;">
-        <li><strong>2010:</strong> Under U.S. EPA Clean Air Act regulations, manufacturing and importing <strong>new</strong> air conditioning and heat pump equipment charged with R-22 was banned effective January 1, 2010.</li>
-        <li><strong>January 1, 2020:</strong> The EPA completely banned the <strong>production and import</strong> of virgin R-22 in the United States.</li>
-        <li><strong>2020–Present:</strong> Existing R-22 units can still be serviced legally, but <strong>only recovered, recycled, or reclaimed R-22</strong> from existing equipment stock remains available for servicing.</li>
-        <li><strong>AIM Act Transition (R-410A → R-454B / R-32):</strong> Under the EPA’s American Innovation and Manufacturing (AIM) Act, HFC refrigerants including R-410A are now being phased down as well, and new residential split systems transition to lower-GWP refrigerants such as <strong>R-454B</strong> and <strong>R-32</strong>.</li>
+        <li><strong>January 1, 2010:</strong> Under <a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">U.S. EPA Clean Air Act phaseout rules</a>, manufacturing and importing <strong>new</strong> air conditioners and heat pumps using R-22 was banned.</li>
+        <li><strong>January 1, 2020:</strong> Virgin R-22 <strong>production and import</strong> ended completely in the United States.</li>
+        <li><strong>2020–Present:</strong> Existing R-22 equipment can be repaired legally using <strong>recovered, recycled, or reclaimed R-22</strong> stock only.</li>
+        <li><strong>AIM Act Transition (R-410A → R-454B / R-32):</strong> Under the <a href={OFFICIAL_SOURCES.epaAim} target="_blank" rel="noopener noreferrer">EPA American Innovation and Manufacturing (AIM) Act</a>, R-410A and other HFCs are undergoing gradual phasedown caps while new residential systems shift to <strong>R-454B</strong> and <strong>R-32</strong>.</li>
       </ul>
     </div>
 
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-04-nameplate-refrigerant-timeline.svg"
+        alt="Diagram highlighting MFR DATE and REFRIGERANT lines on a condenser nameplate alongside the EPA 2010, 2020 R-22 ban and AIM Act timeline."
+        width="820"
+        height="330"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 04: Locate both MFR DATE and Refrigerant Type on the outdoor condenser rating plate before approving a recharge or coil swap.
+      </figcaption>
+    </figure>
+
     <h2>Why R-22 Leaks Destroy Repair Economics</h2>
     <p>
-      A sealed air conditioner should never consume refrigerant. When an R-22 unit is low on charge, there is a physical pinhole leak in the copper evaporator coil, condenser coil, flare fitting, or line set. Repairing that problem creates three compounding risks on any system built in or before 2009:
+      HVAC systems run as closed loops—they never consume refrigerant during normal operation. Low R-22 charge means an active copper leak in the coil, service valve, or line set. Repairing leaks on equipment built before 2010 creates three risks:
     </p>
     <ol>
-      <li><strong>Shrinking reclaimed supply:</strong> Because no new R-22 has been manufactured or imported into the US since January 1, 2020, technicians rely exclusively on reclaimed cylinders recovered from decommissioned equipment. Every pound added to a leaking coil carries scarcity pricing.</li>
-      <li><strong>A “recharge only” buys months, not years:</strong> Spending $600 to $1,100 to top off a leaking coil without brazing or replacing the coil simply leaks that expensive reclaimed gas back outside—often before the end of the cooling season.</li>
-      <li><strong>Dry-shipped R-22 replacement parts are a dead end:</strong> Even if a tech replaces a major R-22 component using a dry-nitrogen “dry unit,” the older indoor coil or compressor sitting alongside it is still well past 15 years old and carries no long-term system warranty.</li>
+      <li><strong>Reclaimed supply scarcity:</strong> Zero virgin supply means technicians draw strictly from reclaimed cylinders recovered from retired equipment, keeping per-pound prices elevated.</li>
+      <li><strong>“Recharge-only” bids fail fast:</strong> Paying $600–$1,100 to top off R-22 without fixing the leak often loses that refrigerant before peak summer ends—see <a href="/guides/signs-your-hvac-is-dying/">terminal leaks vs. minor electrical fixes</a>.</li>
+      <li><strong>No system-wide protection:</strong> Replacing a leaking coil on a 16-year-old outdoor compressor still leaves an old compressor with expired warranties and no <a href="/guides/seer2-explained/">SEER2 efficiency gains</a>.</li>
     </ol>
 
     <h2>How to Verify What Refrigerant Your Unit Uses</h2>
     <p>
-      Do not guess from memory. Walk outside to the metal nameplate (data plate) bolted to the side of your condenser or heat pump cabinet and look for two lines:
+      Do not rely on hearsay or rough installation dates when a house has changed hands. Walk outside to the metal rating plate (data plate) riveted to the outdoor condenser cabinet and write down two printed fields before reading a repair quote:
     </p>
     <ul>
-      <li><strong>Refrigerant stamp:</strong> It will explicitly print <code>R-22</code> (HCFC-22), <code>R-410A</code>, <code>R-32</code>, or <code>R-454B</code> along with factory charge in ounces or pounds.</li>
-      <li><strong>Manufacture date:</strong> Look for <code>MFR DATE</code> or read the first four digits of the serial number. Any residential split AC manufactured in 2010 or later cannot legally be factory-charged with R-22 (except limited legacy dry-shipped service condensers).</li>
+      <li><strong>Refrigerant field:</strong> It will explicitly print <code>R-22</code> (HCFC-22), <code>R-410A</code>, <code>R-32</code>, or <code>R-454B</code> along with factory weight in pounds and ounces. Also inspect the indoor air handler cabinet, as mismatched coils occasionally carry different labels.</li>
+      <li><strong>Manufacture date (<code>MFR DATE</code>):</strong> Units built from 2010 onward were not factory-charged with R-22 under <a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">federal law</a> (except limited uncharged service replacements). Knowing the exact year tells you whether age clears Check C’s 12-year mark.</li>
     </ul>
 
-    <h2>What About R-410A Under the AIM Act?</h2>
+    <h2>What About Alternative “Drop-In” R-22 Retrofits?</h2>
     <p>
-      Homeowners often confuse R-22 with R-410A after hearing headlines about refrigerant changes. Here is the key distinction:
+      Some contractors propose recovering remaining R-22 and recharging an old system with an alternative refrigerant blend (such as R-407C, R-422B, or R-438A) instead of paying reclaimed R-22 prices. Before accepting a retrofit quote, weigh three engineering realities:
     </p>
+    <ul>
+      <li><strong>A retrofit still fails if the leak remains unfixed:</strong> Swapping refrigerants without replacing the corroded evaporator coil or leaking braze joint still loses the new charge.</li>
+      <li><strong>Oil compatibility and capacity drop:</strong> R-22 compressors use mineral oil, whereas several replacement blends require changing compressor oil to POE or adjusting metering valves and can lower cooling capacity by several percent in hot weather.</li>
+      <li><strong>Zero warranty reset on an aging compressor:</strong> A 16-year-old compressor still carries zero factory parts warranty after a chemical retrofit, so verify the total cost carefully inside the <a href="/guides/5000-rule/">calculator’s holding-cost sheet</a>.</li>
+    </ul>
+
+    <h2>R-22 vs. R-410A Under the AIM Act</h2>
     <p>
-      R-22 is an ozone-depleting HCFC whose production and import ended completely on <strong>January 1, 2020</strong>. By contrast, <strong>R-410A</strong> is an HFC being phased down gradually on a multi-year schedule under the EPA’s AIM Act, with new residential systems shifting to A2L refrigerants like <strong>R-454B</strong> and <strong>R-32</strong>. If you currently own an 8-year-old R-410A system that needs a $450 capacitor or blower motor, you do <em>not</em> need to panic-replace it—R-410A service supply remains widely available for servicing existing systems.
+      Avoid confusing R-22’s completed 2020 production cutoff with the newer <a href={OFFICIAL_SOURCES.epaAim} target="_blank" rel="noopener noreferrer">AIM Act</a> HFC phasedown affecting R-410A. An 8-year-old R-410A unit needing a $450 capacitor or blower motor still has ample service supply and normally merits repair; only R-22 systems face zero virgin production.
     </p>
 
     <h2>When Replacing an R-22 Unit, Watch the Line Set</h2>
     <p>
-      One of the easiest ways an R-22 replacement quote goes wrong is reusing old copper refrigerant tubing without checking oil compatibility and pipe diameter:
+      Always check <a href="/guides/how-to-read-hvac-quote/">your itemized replacement quote</a> to verify the copper line set is swapped—or flushed under manufacturer approval—because R-22 uses <strong>mineral oil</strong> whereas R-410A, R-454B, and R-32 require incompatible <strong>POE synthetic oil</strong>, and suction line diameters frequently differ.
     </p>
-    <ul>
-      <li>R-22 systems circulated <strong>mineral oil</strong>; modern R-410A, R-454B, and R-32 systems circulate <strong>POE (polyolester) synthetic oil</strong>. Leftover mineral oil and acidic sludge inside an old line set can damage a brand-new compressor or clog a metering device.</li>
-      <li>Modern high-efficiency condensers often require a larger suction line diameter than 1990s/2000s R-22 units.</li>
-      <li>Always confirm in writing whether your replacement bid includes installing a <strong>new copper line set</strong> (or, where lines are buried behind finished drywall, a documented manufacturer-approved chemical flush and pressure test).</li>
-    </ul>
 
     <h2>Worked Example: R-22 Coil Leak vs. New System Math</h2>
     <div class="worked-example">
       <p>
-        <strong>Scenario:</strong> A homeowner in Georgia has a <strong>16-year-old R-22 split AC</strong> that stopped cooling on a 92°F afternoon. The technician finds a leaking indoor evaporator coil and gives two quotes:
+        <strong>Scenario:</strong> Georgia homeowner, <strong>16-year-old R-22 split AC</strong> with a leaking evaporator coil, <strong>6-year</strong> planned stay, $400/yr expected repairs on aging parts, and $150/yr cooling savings:
       </p>
       <ul>
-        <li><strong>Repair option:</strong> Replace evaporator coil + recover/recharge reclaimed R-22 = <strong>$2,450</strong>.</li>
-        <li><strong>Replace option:</strong> Install new matched 14.3 SEER2 R-454B/R-32 condenser, coil, and new copper line set = <strong>$9,600</strong>.</li>
-        <li><strong>Homeowner stay horizon:</strong> 6 years.</li>
+        <li><strong>Repair quote:</strong> Coil replacement + EPA 608 recovery + reclaimed R-22 = <strong>$2,450</strong>.</li>
+        <li><strong>Replacement quote:</strong> Matched 14.3 SEER2 R-454B/R-32 unit + new copper line set = <strong>$9,600</strong>.</li>
       </ul>
       <p style="margin-bottom: 0;">
-        <strong>Why the 4-check audit leans replace:</strong> Check A (<code>16 × $2,450 = $39,200</code>) fires heavily over $5,000. Check C (age &gt; 12 AND R-22) fires the hard flag. Even though $2,450 is 25.5% of $9,600 (under the 50% rule), sinking $2,450 into a 16-year-old outdoor compressor running obsolete R-22 leaves zero protection if the outdoor compressor fails next summer—turning total 6-year spend into $2,450 + $9,600 = <strong>$12,050</strong> instead of $9,600 once.
+        <strong>Audit check:</strong> Although $2,450 passes the <a href="/guides/5000-rule/">50% rule</a> (25.5%), Check A (<code>16 × $2,450 = $39,200</code>) and Check C (age &gt; 12 + R-22) both fire. Over 6 years, if the outdoor compressor fails later, cumulative spend reaches $2,450 + $9,600 = <strong>$12,050</strong> instead of replacing once cleanly.
       </p>
     </div>
 
-    <h2>Check Your Numbers Before Deciding</h2>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+
+    <h2>Run Your Exact Quotes</h2>
     <p>
-      If your system is older than 12 years and stamped R-22, run your exact quotes through the <a href="/">HVAC Repair or Replace Calculator</a> and review <a href="/guides/how-to-read-hvac-quote/">our quote checklist</a> to make sure any replacement bid explicitly covers the line set and EPA Section 608 recovery.
+      Test your unit’s age, refrigerant stamp, and stay horizon in our <a href="/">HVAC Repair or Replace Calculator</a>—especially if you plan to move within 1–2 years, when Check D holding costs can shift a non-leak repair toward Borderline.
     </p>
   </article>
 </BaseLayout>

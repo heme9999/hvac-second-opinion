@@ -1,10 +1,43 @@
 ---
+import { OFFICIAL_SOURCES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const FAQ_ITEMS = [
+  {
+    question: 'Is SEER2 lower than SEER for the exact same air conditioner?',
+    answer:
+      'Yes. Because the DOE M1 test procedure increases duct static pressure resistance, SEER2 is approximately SEER multiplied by 0.95 (about 4.5% to 5% lower), so SEER and SEER2 quotes cannot be compared directly without conversion.',
+  },
+  {
+    question: 'Does the federal 25C heat pump tax credit still apply in 2026?',
+    answer:
+      'No. Per IRS rules, the Section 25C Energy Efficient Home Improvement Credit (30% up to $2,000/year for heat pumps) applied only to systems placed in service on or before December 31, 2025, and expired for 2026 installations.',
+  },
+  {
+    question: 'Why does the calculator default yearly energy savings to $0?',
+    answer:
+      'Real cooling savings depend on run hours, local kWh rates, and duct leakage. Keeping savings at $0 unless you verify your own electric bills avoids inflating replacement ROI with brochure estimates.',
+  },
+] as const;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 ---
 
 <BaseLayout
-  title="SEER2 Explained: DOE Minimums & Real Energy Savings | HVAC Second Opinion"
+  title="SEER2 Explained: DOE Minimums & 2026 Rebates | HVAC Second Opinion"
   description="Verified DOE 10 CFR 430.32 SEER2 minimums, ENERGY STAR heat pump ratings, SEER vs SEER2 conversion math, and why expired 25C credits shift focus to DSIRE."
+  structuredData={faqSchema}
 >
   <nav aria-label="Breadcrumb" class="breadcrumb">
     <a href="/">Calculator</a> / <a href="/guides/">Guides</a> / <span>SEER2 Explained</span>
@@ -13,12 +46,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   <article class="prose">
     <h1>SEER2 Explained: What Efficiency Ratings Actually Save You</h1>
     <p class="intro-lead">
-      Contractors often pitch high-efficiency upgrades by promising your electric bill will be cut in half. Before paying $3,000 extra for a higher SEER2 badge—or factoring utility savings into your replacement math—here are the verified federal rules and real kilowatt-hour arithmetic.
+      Contractors frequently justify a $3,000 higher bid by promising your power bill will drop in half. Before paying extra for top-tier SEER2 badges—or counting utility savings inside our <a href="/">calculator</a>—check the federal rules and real kilowatt-hour math below.
     </p>
 
     <h2>Verified DOE Regional Minimums (10 CFR 430.32)</h2>
     <p>
-      Effective <strong>January 1, 2023</strong>, the U.S. Department of Energy (DOE) updated residential central air conditioner and heat pump efficiency standards under <strong>10 CFR 430.32</strong> and switched the test procedure from SEER/HSPF to <strong>SEER2/HSPF2</strong>, which uses higher external static pressure to better reflect real home ductwork.
+      Effective <strong>January 1, 2023</strong>, the U.S. Department of Energy (<a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">10 CFR 430.32</a>) established regional minimum standards under the <strong>SEER2 and HSPF2</strong> test procedures, applying higher external static pressure to simulate household ductwork:
     </p>
 
     <div tabindex="0" role="region" aria-label="DOE and ENERGY STAR SEER2 minimums" class="table-wrapper">
@@ -36,76 +69,129 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <th scope="row">Split-system central AC</th>
             <td>North</td>
             <td class="tabular">13.4 SEER2</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">Split-system central AC (&lt; 45,000 Btu/h)</th>
             <td>Southeast / Southwest</td>
             <td class="tabular">14.3 SEER2</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">Split-system central AC (≥ 45,000 Btu/h)</th>
             <td>Southeast / Southwest</td>
             <td class="tabular">13.8 SEER2</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">Split-system heat pump</th>
             <td>Nationwide</td>
             <td class="tabular">14.3 SEER2 / 7.5 HSPF2</td>
-            <td>DOE (10 CFR 430.32)</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">DOE (10 CFR 430.32)</a></td>
           </tr>
           <tr>
             <th scope="row">ENERGY STAR split heat pump</th>
             <td>Nationwide</td>
             <td class="tabular">15.2 SEER2 / 7.8 HSPF2</td>
-            <td>ENERGY STAR</td>
+            <td><a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR v6.1</a></td>
           </tr>
         </tbody>
       </table>
     </div>
 
+    <figure class="manual-figure">
+      <img
+        src="/images/fig-05-seer2-regional-map.svg"
+        alt="Comparison chart of DOE 10 CFR 430.32 regional SEER2 minimums alongside annual 3-ton cooling costs in mild Northern vs hot Southern climates."
+        width="820"
+        height="330"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>
+        Figure 05: Verified DOE 10 CFR 430.32 regional minimums vs. real annual cooling electricity cost across Northern and Southern run-hour profiles.
+      </figcaption>
+    </figure>
+
     <h2>Why SEER and SEER2 Are Not Directly Comparable</h2>
     <p>
-      Because the DOE M1 test procedure increases duct static pressure resistance during laboratory testing, the exact same piece of equipment earns a lower number under SEER2 than it did under the older SEER scale. As a rule of thumb, <strong>SEER2 is approximately SEER × 0.95</strong> (about 4.5% to 5% lower).
-    </p>
-    <p>
-      For example, a 14.0 SEER unit under the old test converts roughly to <strong>13.4 SEER2</strong>, and a 15.0 SEER unit converts roughly to <strong>14.3 SEER2</strong>. Never compare an old SEER quote against a newer SEER2 quote without converting both to the same scale—and always check the matched AHRI certificate rather than relying on brochure marketing labels.
+      Under the DOE M1 test procedure, testing equipment against realistic external duct static pressure reduces numeric scores for the exact same hardware: <strong>SEER2 ≈ SEER × 0.95</strong> (roughly 4.5% to 5% lower). For instance, a legacy 14.0 SEER condenser translates roughly to <strong>13.4 SEER2</strong>, and a 15.0 SEER unit translates roughly to <strong>14.3 SEER2</strong>. Never compare an older SEER brochure directly against a post-2023 SEER2 quote without converting scales—and demand an official AHRI Certified Reference Number in <a href="/guides/how-to-read-hvac-quote/">your written quote</a>.
     </p>
 
-    <h2>Tax Credits vs. Rebates in 2026: Check the Date</h2>
+    <h2>How to Estimate Your Real Electric Savings From Bills</h2>
+    <p>
+      Instead of accepting generic percentage claims from a sales pitch, spend three minutes calculating a realistic annual cooling budget directly from your utility history:
+    </p>
+    <ol>
+      <li><strong>Find your shoulder-month baseline:</strong> Check your utility statements from mild spring or fall months (such as April and October) when neither air conditioning nor electric resistance heating runs heavily.</li>
+      <li><strong>Isolate summer cooling usage:</strong> Subtract that shoulder-month kWh average from your peak cooling months (June through September) and sum those incremental cooling kilowatt-hours for the year.</li>
+      <li><strong>Multiply by rate and efficiency ratio:</strong> Multiply seasonal cooling kWh by your electric rate ($/kWh), then multiply by <code>1 − (Old Effective SEER2 ÷ New SEER2)</code>. For instance, shifting $600 of annual cooling electricity from 10 SEER2 to 14.3 SEER2 trims roughly 30%, or ~$180/year.</li>
+      <li><strong>Stay conservative when uncertain:</strong> If your bills mix pool pumps, EV charging, or varied occupancy, leave expected savings at <strong>$0</strong> inside the <a href="/">calculator</a> so hypothetical savings never mask an inflated replacement quote.</li>
+    </ol>
+
+    <h2>2026 Tax Credits vs. Active State &amp; Utility Rebates</h2>
     <div class="source-callout">
-      <strong>Important IRS Notice on Section 25C:</strong> Do <em>not</em> build your replacement budget assuming a federal 25C tax credit is currently active. Under IRS rules, the Energy Efficient Home Improvement Credit (Section 25C, which offered 30% up to $2,000 per year for qualifying heat pumps) applied only to property <strong>placed in service on or before December 31, 2025</strong> and expired for 2026 installations. Before finalizing any efficiency upgrade, look up active state energy office programs and local electric utility rebates in the <strong>DSIRE database</strong> (Database of State Incentives for Renewables &amp; Efficiency).
+      <strong>IRS Section 25C Notice:</strong> Per <a href={OFFICIAL_SOURCES.irs25c} target="_blank" rel="noopener noreferrer">IRS guidance</a>, the federal Section 25C credit (30% up to $2,000/yr for qualifying heat pumps) applied only to property <strong>placed in service on or before December 31, 2025</strong> and expired for 2026 installations. Verify local programs on <a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE</a> before sizing incentives into a bid.
+    </div>
+
+    <div tabindex="0" role="region" aria-label="2026 HVAC tax credit and rebate pathways" class="table-wrapper">
+      <table class="estimate-table">
+        <thead>
+          <tr>
+            <th>Incentive Track</th>
+            <th>2026 Status</th>
+            <th>Verification Rule</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Federal IRS Section 25C Credit</th>
+            <td>Expired Dec 31, 2025 ($0 for 2026 installs)</td>
+            <td><a href={OFFICIAL_SOURCES.irs25c} target="_blank" rel="noopener noreferrer">IRS Section 25C</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Electric Utility Heat Pump Rebates</th>
+            <td>Active in many utility territories</td>
+            <td>Search ZIP on <a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE</a>; often requires ≥15.2 SEER2 / 7.8 HSPF2 <a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR</a> AHRI match</td>
+          </tr>
+          <tr>
+            <th scope="row">State Energy Office Rebates (HOMES/HEAR)</th>
+            <td>State-by-state rollout schedules</td>
+            <td>Confirm income/efficiency caps and pre-approval rules on <a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE</a> before install</td>
+          </tr>
+          <tr>
+            <th scope="row">Manufacturer / Distributor Rebates</th>
+            <td>Seasonal cash discounts</td>
+            <td>Compare pre-rebate net cost against baseline bids (see <a href="/guides/how-to-vet-hvac-contractor/">contractor bid checklist</a>)</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <h2>Worked Example: Real Cooling Savings From SEER2 Upgrades</h2>
-    <p>
-      Why does our calculator default yearly energy savings to <strong>$0</strong> unless you enter your own utility numbers? Because cooling savings depend on how many hours your AC actually runs each summer, your electricity rate, and your old unit’s true operating condition. Here is the clean arithmetic for two different U.S. climates on a 3-ton (36,000 Btu/h) central AC replacing an older unit operating around 10 SEER2 equivalent:
-    </p>
     <div class="worked-example">
       <p>
-        Suppose you replace an aging 10 SEER2-equivalent unit with a <strong>14.3 SEER2</strong> baseline unit (a 30% reduction in cooling electricity, since <code>1 − (10 ÷ 14.3) = 30.1%</code>), vs. stepping up to an <strong>18.0 SEER2</strong> variable-speed system (a 44.4% reduction from 10 SEER2, or 20.6% further reduction over 14.3 SEER2):
+        Replacing an aging 3-ton (36,000 Btu/h) unit running near 10 SEER2 (common with older <a href="/guides/r22-refrigerant/">R-22 systems</a>) with a <strong>14.3 SEER2</strong> baseline unit vs. an <strong>18.0 SEER2</strong> variable-speed tier:
       </p>
       <ul>
-        <li><strong>Mild Northern climate (600 full-load cooling hours/year, $0.16/kWh):</strong>
-          The old 10 SEER2 unit uses <code>(36,000 × 600) ÷ 10 ÷ 1,000 = 2,160 kWh/yr</code> = <strong>$346/yr</strong>. Moving to 14.3 SEER2 drops usage to <code>1,510 kWh/yr</code> = <strong>$242/yr</strong> (saving <strong>$104/yr</strong>). Stepping up from 14.3 to 18.0 SEER2 drops usage to <code>1,200 kWh/yr</code> = <strong>$192/yr</strong>—saving only an extra <strong>$50/yr</strong>, which takes 40 years to repay a $2,000 equipment premium.
-        </li>
-        <li><strong>Hot Southern climate (1,800 full-load cooling hours/year, $0.15/kWh):</strong>
-          The old 10 SEER2 unit uses <code>(36,000 × 1,800) ÷ 10 ÷ 1,000 = 6,480 kWh/yr</code> = <strong>$972/yr</strong>. Moving to 14.3 SEER2 drops usage to <code>4,531 kWh/yr</code> = <strong>$680/yr</strong> (saving <strong>$292/yr</strong>). Stepping up to 18.0 SEER2 cuts usage to <code>3,600 kWh/yr</code> = <strong>$540/yr</strong> (saving an additional <strong>$140/yr</strong>).
-        </li>
+        <li><strong>Mild Northern climate (600 cooling hrs/yr, $0.16/kWh):</strong> 10 SEER2 uses <code>2,160 kWh = $346/yr</code>; 14.3 SEER2 drops to <code>1,510 kWh = $242/yr</code> (saves <strong>$104/yr</strong>). Moving from 14.3 to 18.0 SEER2 saves only an extra <strong>$50/yr</strong>—requiring 40 years to repay a $2,000 price jump.</li>
+        <li><strong>Hot Southern climate (1,800 cooling hrs/yr, $0.15/kWh):</strong> 10 SEER2 uses <code>6,480 kWh = $972/yr</code>; 14.3 SEER2 drops to <code>4,531 kWh = $680/yr</code> (saves <strong>$292/yr</strong>); 18.0 SEER2 trims another <strong>$140/yr</strong>.</li>
       </ul>
       <p style="margin-bottom: 0;">
-        <strong>Practical takeaway:</strong> Going from an aging, worn unit to today’s DOE baseline (13.4 or 14.3 SEER2) delivers the biggest share of realistic bill savings. Paying steep premiums for ultra-high SEER2 tiers usually only pencils out in hot cooling climates, when paired with active DSIRE utility rebates, or when you want two-stage/variable-speed humidity control.
+        Plug conservative summer-bill estimates into Check D of the <a href="/">calculator</a> alongside <a href="/guides/5000-rule/">the $5,000 and 50% rules</a>, or leave savings at $0 when bills are unknown. Also ask your <a href="/guides/how-to-vet-hvac-contractor/">vetted contractor</a> to measure duct static pressure so leaky ducts never erase nameplate efficiency.
       </p>
     </div>
 
-    <h2>How to Enter Energy Savings in the Calculator</h2>
-    <p>
-      Look at your summer electric bills (compare July and August against mild April and May baseline months to isolate cooling cost), apply the rough SEER2 ratio above, and enter a conservative whole-dollar number in the <a href="/">HVAC Repair or Replace Calculator</a>—or leave it at <strong>$0</strong> if you do not have your bills handy so you never fool yourself into replacing a fixable unit on imaginary utility math.
-    </p>
-    <p>
-      As a final check, verify that your contractor also inspects duct static pressure and refrigerant charge at startup: ENERGY STAR field studies and DOE guidance emphasize that leaking or undersized ducts can erase much of the real-world efficiency gain you paid for on the equipment nameplate.
-    </p>
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-list">
+      {FAQ_ITEMS.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <div class="faq-answer">
+            <p style="margin-bottom: 0;">{item.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
   </article>
 </BaseLayout>

@@ -2,12 +2,23 @@ export const SITE = {
   name: 'HVAC Second Opinion',
   shortName: 'HVAC Second Opinion',
   url: 'https://hvac-second-opinion.pages.dev',
-  email: 'peter@hvacsecondopinion.org',
+  email: 'mayday0064@gmail.com',
   author: 'Peter',
   lastUpdated: '2026-11-14',
   googleSiteVerification: 'wMz2VDeMwD8R6yiCgJIqFD_wM2wSzrSEauzvCtzKHyw',
   disclaimer:
     'Estimates only, not a professional diagnosis. Gas, electrical and carbon-monoxide safety decisions need a licensed pro. Prices vary by region and install complexity.',
+} as const;
+
+export const OFFICIAL_SOURCES = {
+  doeSeer2:
+    'https://www.ecfr.gov/current/title-10/chapter-II/subchapter-D/part-430/subpart-C/section-430.32',
+  epaR22: 'https://www.epa.gov/ods-phaseout/phaseout-class-ii-ozone-depleting-substances',
+  epaAim: 'https://www.epa.gov/climate-hfcs-reduction',
+  energyStar:
+    'https://www.energystar.gov/products/heating_cooling/heat_pumps_air_source/key_product_criteria',
+  dsire: 'https://www.dsireusa.org/',
+  irs25c: 'https://www.irs.gov/credits-deductions/energy-efficient-home-improvement-credit',
 } as const;
 
 export interface GuideLink {

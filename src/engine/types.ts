@@ -35,6 +35,7 @@ export interface CalculationResult {
   flipPerYearDollars: number | null;
   flipExplanation: string;
   stayHorizonNote: string | null;
+  ageWarningNote: string | null;
   isShortStay: boolean;
   checks: readonly CheckResult[];
   firedChecksSummary: string;

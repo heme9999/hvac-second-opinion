@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" role="img" aria-labelledby="fig06-title fig06-desc">
+  <title id="fig06-title">Figure 06: ACCA Manual J Load Sizing vs. Rule-of-Thumb Oversizing</title>
+  <desc id="fig06-desc">Technical comparison of a rule-of-thumb 4-ton oversized bid ($8,400) versus an ACCA Manual J 3-ton properly matched installation ($9,900) and a high-tier variable bid ($13,600), showing short-cycling and static pressure risks.</desc>
+  <rect width="820" height="330" fill="#FAF7F2" stroke="#1F2937" stroke-width="2" />
+  <rect x="0" y="0" width="820" height="34" fill="#1F2937" />
+  <text x="16" y="22" fill="#FAF7F2" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13" font-weight="700">FIG 06 · ACCA MANUAL J SIZING VS. OVERSIZED SHORT-CYCLING</text>
+  <text x="804" y="22" fill="#C2410C" text-anchor="end" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12" font-weight="700">CONTRACTOR VETTING</text>
+
+  <!-- Card 1: Oversized Rule-of-Thumb -->
+  <rect x="22" y="54" width="246" height="252" fill="#FFFFFF" stroke="#C2410C" stroke-width="2" />
+  <rect x="22" y="54" width="246" height="30" fill="#FFF4ED" stroke="#C2410C" stroke-width="1.5" />
+  <text x="34" y="74" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">BID 1 · $8,400 · REJECT</text>
+  <text x="34" y="106" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">4-Ton Rule-of-Thumb Guess</text>
+  <text x="34" y="126" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• No Manual J load calculation</text>
+  <text x="34" y="146" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Forces 1,600 CFM into 3-ton ducts</text>
+  <text x="34" y="166" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• 6–8 min runs = poor humidity</text>
+  <text x="34" y="186" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Permit billed extra; 1-yr labor</text>
+  <!-- Cycle wave visual (spiky short cycle) -->
+  <polyline points="36,255 48,215 60,255 82,255 94,215 106,255 128,255 140,215 152,255 174,255 186,215 198,255 246,255" fill="none" stroke="#C2410C" stroke-width="2" />
+  <text x="36" y="282" fill="#C2410C" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">SHORT-CYCLING · HIGH AMPS</text>
+
+  <!-- Card 2: Verified Manual J Match -->
+  <rect x="287" y="54" width="246" height="252" fill="#FFFFFF" stroke="#166534" stroke-width="2.5" />
+  <rect x="287" y="54" width="246" height="30" fill="#166534" />
+  <text x="299" y="74" fill="#FFFFFF" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">BID 2 · $9,900 · WINNER</text>
+  <text x="299" y="106" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">3-Ton Manual J + Duct Audit</text>
+  <text x="299" y="126" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Measured load: 31,800 Btu/h</text>
+  <text x="299" y="146" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Static pressure &amp; AHRI match</text>
+  <text x="299" y="166" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Permit, EPA 608 &amp; new line set</text>
+  <text x="299" y="186" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• 2-yr written labor warranty</text>
+  <!-- Steady smooth cycle -->
+  <polyline points="301,255 316,220 420,220 436,255 512,255" fill="none" stroke="#166534" stroke-width="2.5" />
+  <text x="301" y="282" fill="#166534" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">STEADY RUN · FULL DEHUMIDIFY</text>
+
+  <!-- Card 3: Overbuilt Sales Tier -->
+  <rect x="552" y="54" width="246" height="252" fill="#FFFFFF" stroke="#1F2937" stroke-width="1.5" />
+  <rect x="552" y="54" width="246" height="30" fill="#F2ECE1" stroke="#1F2937" stroke-width="1.5" />
+  <text x="564" y="74" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">BID 3 · $13,600 · OVERSPEND</text>
+  <text x="564" y="106" fill="#1F2937" font-family="system-ui, sans-serif" font-size="13" font-weight="700">19 SEER2 Variable Upsell</text>
+  <text x="564" y="126" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Right-sized 3-ton capacity</text>
+  <text x="564" y="146" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• Relies on expired 25C credit</text>
+  <text x="564" y="166" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• +$3,700 premium over Bid 2</text>
+  <text x="564" y="186" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">• ~$80/yr extra utility savings</text>
+  <rect x="566" y="216" width="218" height="72" fill="#FAF7F2" stroke="#1F2937" stroke-width="1" />
+  <text x="576" y="236" fill="#1F2937" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="11" font-weight="700">PAYBACK CHECK:</text>
+  <text x="576" y="255" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">$3,700 ÷ $80/yr = 46 years</text>
+  <text x="576" y="274" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">(Far exceeds compressor life)</text>
+</svg>
