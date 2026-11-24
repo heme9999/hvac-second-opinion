@@ -1254,6 +1254,10 @@ figure.manual-figure figcaption {
   vertical-align: middle;
 }
 
+.estimate-tag[hidden] {
+  display: none;
+}
+
 .estimate-disclosure {
   border: 1.5px solid var(--ink);
   border-left: 5px solid var(--ink);

@@ -377,6 +377,7 @@ describe('Content, SEO, and design constraints on built dist/', () => {
       expect(css).not.toMatch(/linear-gradient|radial-gradient/i);
       const nonZeroRadius = /border-radius\s*:\s*(?!0\b)/i.test(css);
       expect(nonZeroRadius).toBe(false);
+      expect(css).toMatch(/\.estimate-tag\[hidden\]\s*\{[^}]*display\s*:\s*none/i);
     }
   });
 });
