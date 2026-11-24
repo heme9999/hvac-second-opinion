@@ -1224,3 +1224,62 @@ figure.manual-figure figcaption {
   color: var(--muted);
   line-height: 1.45;
 }
+
+/* Scenario Estimate Controls & Disclosures */
+.estimate-controls {
+  border: 1px solid var(--hairline);
+  border-left: 4px solid var(--ink);
+  background: var(--paper-subtle);
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.estimate-controls-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.estimate-tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--accent);
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.estimate-disclosure {
+  border: 1.5px solid var(--ink);
+  border-left: 5px solid var(--ink);
+  background: var(--paper-subtle);
+  padding: var(--space-3);
+  margin-bottom: var(--space-4);
+  font-size: 0.9rem;
+}
+
+.guide-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin-bottom: var(--space-3);
+}
+
+.guide-hub-item {
+  border: 1.5px solid var(--rule);
+  background: var(--paper);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.guide-hub-item h2 {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+  font-size: 1.25rem;
+}

@@ -14,7 +14,7 @@ import { SITE } from '../config/site';
     <!-- Left Column: Estimate Sheet Inputs -->
     <div class="estimate-pane">
       <div class="pane-header">
-        <h2 class="pane-title">1. Your Quote Inputs</h2>
+        <h2 class="pane-title">1. Repair or Replace? Enter Your Quote</h2>
         <span class="pane-code">FORM HSO-01</span>
       </div>
 
@@ -162,12 +162,23 @@ import { SITE } from '../config/site';
           </div>
         </div>
 
+        <div class="estimate-controls" role="group" aria-label="Optional Check D planning estimates">
+          <span class="helper-text" style="margin-bottom: 0.45rem;">
+            <strong>Optional Check D Scenario Estimates:</strong> Entering system age prefills editable planning scenarios for future repairs and SEER2 bill savings—not factual guarantees.
+          </span>
+          <div class="estimate-controls-btns">
+            <button type="button" class="btn-chip" id="apply-estimates-btn">Apply Age/SEER2 Scenario Estimates</button>
+            <button type="button" class="btn-chip" id="zero-estimates-btn">Use $0 Conservative</button>
+          </div>
+        </div>
+
         <div class="field-group">
           <label for="future-annual-repair">
             Expected future repair costs on the old system ($ per year)
+            <span class="estimate-tag" id="future-repair-badge" hidden>SCENARIO ESTIMATE</span>
           </label>
           <span class="helper-text" id="future-repair-hint">
-            If your old system needed frequent fixes, add a yearly figure.
+            Editable planning estimate based on age once entered (or leave at $0 if unsure; not a guaranteed fact).
           </span>
           <div class="input-box">
             <span class="input-prefix" aria-hidden="true">$</span>
@@ -193,9 +204,10 @@ import { SITE } from '../config/site';
         <div class="field-group">
           <label for="annual-energy-savings">
             Expected yearly energy savings with a new system ($)
+            <span class="estimate-tag" id="energy-savings-badge" hidden>SCENARIO ESTIMATE</span>
           </label>
           <span class="helper-text" id="energy-savings-hint">
-            Only add a figure if you know your bills; leave it at 0 otherwise.
+            Editable SEER2 kWh scenario estimate based on age once entered, or reset to $0 unless you verify utility bills.
           </span>
           <div class="input-box">
             <span class="input-prefix" aria-hidden="true">$</span>

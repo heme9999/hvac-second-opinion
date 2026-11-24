@@ -3,7 +3,46 @@ import type {
   CalculatorInputs,
   CheckOutcome,
   CheckResult,
+  ScenarioEstimates,
 } from './types';
+
+/**
+ * Computes age-based annual repair and SEER2 kWh utility-savings scenario estimates.
+ * Marked explicitly as editable planning scenarios (never factual guarantees).
+ */
+export function getScenarioEstimates(age: number): ScenarioEstimates {
+  const cleanAge = Math.max(0, Math.round(age));
+
+  let futureAnnualRepairCost = 550;
+  let repairBasis = 'Age 14+ scenario: $550/yr (illustrative elevated risk of major repairs)';
+  if (cleanAge <= 5) {
+    futureAnnualRepairCost = 0;
+    repairBasis = 'Age 0–5 scenario: $0/yr (typical factory parts warranty period)';
+  } else if (cleanAge <= 9) {
+    futureAnnualRepairCost = 150;
+    repairBasis = 'Age 6–9 scenario: $150/yr (illustrative routine wear parts)';
+  } else if (cleanAge <= 13) {
+    futureAnnualRepairCost = 350;
+    repairBasis = 'Age 10–13 scenario: $350/yr (illustrative blower, board, or sensor repairs)';
+  }
+
+  let annualEnergySavings = 0;
+  let energyBasis = 'Age 0–9 SEER2 kWh scenario: $0/yr (already near modern DOE SEER2 minimums)';
+  if (cleanAge >= 15) {
+    annualEnergySavings = 170;
+    energyBasis = 'Age 15+ SEER2 kWh scenario: $170/yr (3-ton, 1,000 hrs, $0.16/kWh: ~10 to 14.3 SEER2)';
+  } else if (cleanAge >= 10) {
+    annualEnergySavings = 80;
+    energyBasis = 'Age 10–14 SEER2 kWh scenario: $80/yr (3-ton, 1,000 hrs, $0.16/kWh: ~12 to 14.3 SEER2)';
+  }
+
+  return {
+    futureAnnualRepairCost,
+    annualEnergySavings,
+    repairBasis,
+    energyBasis,
+  };
+}
 
 export function formatDollars(amount: number): string {
   const rounded = Math.round(amount);
@@ -118,6 +157,8 @@ export function calculateSecondOpinion(
       flipExplanation:
         'Enter your repair quote, replacement quote, and stay horizon to see the exact yearly break-even threshold.',
       stayHorizonNote: null,
+      horizonAgeNote: null,
+      checkDEstimateNote: null,
       ageWarningNote: null,
       isShortStay: false,
       checks: [],
@@ -143,6 +184,7 @@ export function calculateSecondOpinion(
   const isAgeZero = cleanAge === 0;
   const checkA: CheckResult = {
     id: 'A',
+    shortName: 'Check A ($5,000 Rule)',
     title: 'Check A — $5,000 Rule (reference check)',
     fired: firedA,
     favors: firedA ? 'replace' : 'repair',
@@ -166,6 +208,7 @@ export function calculateSecondOpinion(
   const firedB = cleanRepair > halfThreshold;
   const checkB: CheckResult = {
     id: 'B',
+    shortName: 'Check B (50% Rule)',
     title: 'Check B — 50% Rule (reference check)',
     fired: firedB,
     favors: firedB ? 'replace' : 'repair',
@@ -191,6 +234,7 @@ export function calculateSecondOpinion(
           : 'Not sure';
   const checkC: CheckResult = {
     id: 'C',
+    shortName: 'Check C (R-22 Flag)',
     title: 'Check C — R-22 Refrigerant & Age Hard Flag',
     fired: firedC,
     favors: firedC ? 'replace' : 'repair',
@@ -223,6 +267,7 @@ export function calculateSecondOpinion(
 
   const checkD: CheckResult = {
     id: 'D',
+    shortName: `Check D (${cleanYears}-Yr Holding Cost)`,
     title: `Check D — ${cleanYears}-Year Holding-Cost Comparison`,
     fired: firedD,
     favors: favorsD,
@@ -270,12 +315,31 @@ export function calculateSecondOpinion(
       } through utility savings or avoided breakdowns, so repair tolerance is higher unless there is a safety failure or severe R-22 leak.`
     : null;
 
+  // End-of-stay age check
+  const endOfStayAge = cleanAge + cleanYears;
+  const horizonAgeNote =
+    cleanAge >= 10 && endOfStayAge >= 16
+      ? `End-of-stay age check: Keeping a ${cleanAge}-year-old unit for ${cleanYears} more year${
+          cleanYears === 1 ? '' : 's'
+        } carries it to age ${endOfStayAge}, when replacement often becomes unavoidable anyway.`
+      : null;
+
+  // Scenario estimate disclosure
+  const checkDEstimateNote =
+    inputs.usingEstimatedFutureRepair || inputs.usingEstimatedEnergySavings
+      ? 'Scenario estimates active: Optional yearly repair and/or SEER2 energy figures are editable planning scenarios—not guaranteed facts. Replace them with your own utility/service numbers or click “Use $0 Conservative” to run zero-assumption math.'
+      : null;
+
   // Verdict logic:
   // Replace if Check C fires, or if 2 or more of checks A, B, D favor replace.
   // Short-stay exception: when staying 1–2 years, Check D favors repair, and Check B did not exceed 50%,
   // surface Borderline instead of a hard Replace verdict so holding-cost savings and R-22/age risks are weighed openly.
   // Repair if 3 or more of checks A, B, D favor repair and Check C does not fire.
   // Otherwise Borderline.
+  const allChecks: CheckResult[] = [checkA, checkB, checkC, checkD];
+  const firedShortNames = allChecks.filter((c) => c.fired).map((c) => c.shortName);
+  const clearedShortNames = allChecks.filter((c) => !c.fired).map((c) => c.shortName);
+
   const abdChecks = [checkA, checkB, checkD];
   const replaceFavoredCount = abdChecks.filter((c) => c.favors === 'replace').length;
   const repairFavoredCount = abdChecks.filter((c) => c.favors === 'repair').length;
@@ -286,7 +350,9 @@ export function calculateSecondOpinion(
 
   if (isShortStay && cheaperOption === 'repair' && !checkB.fired && (checkC.fired || replaceFavoredCount >= 2)) {
     verdict = 'borderline';
-    verdictHeadline = 'Verdict: Borderline';
+    verdictHeadline = checkC.fired
+      ? `Borderline — Check C (R-22 Flag) vs. ${cleanYears}-Yr Short Stay`
+      : `Borderline — ${firedShortNames.join(' & ')} vs. ${cleanYears}-Yr Short Stay`;
     verdictDetail = checkC.fired
       ? `Your ${cleanAge}-year-old R-22 system triggered the Check C phase-out flag, which normally leans replace—but because you only plan to stay ${cleanYears} year${
           cleanYears === 1 ? '' : 's'
@@ -300,13 +366,13 @@ export function calculateSecondOpinion(
         )} (Check D). Either a targeted repair to bridge your move or replacement is defensible depending on repair warranty terms.`;
   } else if (checkC.fired || replaceFavoredCount >= 2) {
     verdict = 'replace';
-    verdictHeadline = 'Verdict: Lean Replace';
+    verdictHeadline = `Lean Replace — ${firedShortNames.join(' & ')} Triggered`;
     verdictDetail = checkC.fired
       ? 'The R-22 hard flag fired (over 12 years old with phased-out R-22 refrigerant). Sinking large repairs into an R-22 system carries high supply and leak risk.'
       : `${replaceFavoredCount} of the 3 financial checks (A, B, D) favor replacement over your ${cleanYears}-year stay.`;
   } else if (!checkC.fired && repairFavoredCount >= 3) {
     verdict = 'repair';
-    verdictHeadline = 'Verdict: Lean Repair';
+    verdictHeadline = 'Lean Repair — All 4 Checks Clear';
     verdictDetail = `All 3 reference and holding-cost checks (A, B, D) favor repairing, and the R-22 hard flag did not fire.${
       isAgeZero
         ? ' Note: Age 0 sets Check A to $0—confirm whether this unit is covered by first-year installer or manufacturer warranty, or enter the actual nameplate age if unknown.'
@@ -314,19 +380,20 @@ export function calculateSecondOpinion(
     }`;
   } else {
     verdict = 'borderline';
-    verdictHeadline = 'Verdict: Borderline';
+    verdictHeadline =
+      firedShortNames.length > 0
+        ? `Borderline — ${firedShortNames.join(' & ')} Triggered`
+        : 'Borderline — Close Call Across Checks';
     verdictDetail =
       'Either is defensible; here is what would change the answer: check whether your contractor guarantees parts and labor on the repair, and look at the yearly flip number below.';
   }
 
-  const allChecks: CheckResult[] = [checkA, checkB, checkC, checkD];
-  const firedList = allChecks.filter((c) => c.fired).map((c) => `Check ${c.id}`);
-  const notFiredList = allChecks.filter((c) => !c.fired).map((c) => `Check ${c.id}`);
-
   const firedChecksSummary =
-    firedList.length > 0
-      ? `Fired for replace: ${firedList.join(', ')}. Did not fire: ${notFiredList.length > 0 ? notFiredList.join(', ') : 'none'}.`
-      : `No replacement checks fired (Checks A, B, C, D all stayed below replacement triggers or favored repair).`;
+    firedShortNames.length > 0
+      ? `Triggered for replace: ${firedShortNames.join(', ')}. Cleared: ${
+          clearedShortNames.length > 0 ? clearedShortNames.join(', ') : 'none'
+        }.`
+      : 'All 4 checks cleared (Checks A, B, C, and D stayed below replacement triggers or favored repair).';
 
   return {
     ready: true,
@@ -340,6 +407,8 @@ export function calculateSecondOpinion(
     flipPerYearDollars,
     flipExplanation,
     stayHorizonNote,
+    horizonAgeNote,
+    checkDEstimateNote,
     ageWarningNote,
     isShortStay,
     checks: allChecks,

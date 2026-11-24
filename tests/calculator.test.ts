@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { calculateSecondOpinion } from '../src/engine/calculate';
+import { calculateSecondOpinion, getScenarioEstimates } from '../src/engine/calculate';
 import { decodeShareFragment, encodeShareFragment } from '../src/ui/shareLink';
 
 describe('calculateSecondOpinion', () => {
@@ -177,6 +177,57 @@ describe('calculateSecondOpinion', () => {
     expect(res.verdictDetail).toContain('warranty');
   });
 
+  it('computes age/SEER2 scenario estimates, names triggered checks in verdictHeadline, and surfaces end-of-stay horizon + estimate disclosure', () => {
+    expect(getScenarioEstimates(3)).toMatchObject({ futureAnnualRepairCost: 0, annualEnergySavings: 0 });
+    expect(getScenarioEstimates(8)).toMatchObject({ futureAnnualRepairCost: 150, annualEnergySavings: 0 });
+    expect(getScenarioEstimates(12)).toMatchObject({ futureAnnualRepairCost: 350, annualEnergySavings: 80 });
+    expect(getScenarioEstimates(14)).toMatchObject({ futureAnnualRepairCost: 550, annualEnergySavings: 80 });
+    expect(getScenarioEstimates(16)).toMatchObject({ futureAnnualRepairCost: 550, annualEnergySavings: 170 });
+
+    const borderlineRes = calculateSecondOpinion({
+      repairQuote: 1200,
+      replacementQuote: 8500,
+      systemAge: 14,
+      refrigerant: 'r410a',
+      stayYears: 5,
+      futureAnnualRepairCost: 0,
+      annualEnergySavings: 0,
+    });
+    expect(borderlineRes.verdict).toBe('borderline');
+    expect(borderlineRes.verdictHeadline).toBe('Borderline — Check A ($5,000 Rule) Triggered');
+    expect(borderlineRes.horizonAgeNote).toContain('age 19');
+    expect(borderlineRes.checkDEstimateNote).toBeNull();
+
+    const estReplaceRes = calculateSecondOpinion({
+      repairQuote: 1200,
+      replacementQuote: 8500,
+      systemAge: 14,
+      refrigerant: 'r22',
+      stayYears: 5,
+      futureAnnualRepairCost: 550,
+      annualEnergySavings: 80,
+      usingEstimatedFutureRepair: true,
+      usingEstimatedEnergySavings: true,
+    });
+    expect(estReplaceRes.verdict).toBe('replace');
+    expect(estReplaceRes.verdictHeadline).toContain('Lean Replace —');
+    expect(estReplaceRes.verdictHeadline).toContain('Check A ($5,000 Rule)');
+    expect(estReplaceRes.verdictHeadline).toContain('Check C (R-22 Flag)');
+    expect(estReplaceRes.checkDEstimateNote).toContain('Scenario estimates active');
+
+    const clearRes = calculateSecondOpinion({
+      repairQuote: 300,
+      replacementQuote: 8500,
+      systemAge: 8,
+      refrigerant: 'r410a',
+      stayYears: 5,
+      futureAnnualRepairCost: 0,
+      annualEnergySavings: 0,
+    });
+    expect(clearRes.verdict).toBe('repair');
+    expect(clearRes.verdictHeadline).toBe('Lean Repair — All 4 Checks Clear');
+  });
+
   it('round-trips share fragment cleanly without personal data', () => {
     const input = {
       repairQuote: 1450,
@@ -236,6 +287,8 @@ describe('Content, SEO, and design constraints on built dist/', () => {
       expect(wordCount).toBeGreaterThanOrEqual(850);
       expect(wordCount).toBeLessThanOrEqual(1200);
       expect(html).toContain('"@type":"FAQPage"');
+      expect(html).toContain('Last updated:');
+      expect(html).toContain('2026-11-24');
 
       const imgMatch = html.match(/<img[^>]+src="(\/images\/[^"]+\.svg)"/i);
       expect(imgMatch).not.toBeNull();
@@ -270,13 +323,36 @@ describe('Content, SEO, and design constraints on built dist/', () => {
     const homeHtml = fs.readFileSync(path.join(distDir, 'index.html'), 'utf-8');
     expect(homeHtml).toContain('"@type":"WebApplication"');
     expect(homeHtml).toContain('"@type":"FAQPage"');
+    expect(homeHtml).toContain('Repair or Replace? Enter Your Quote');
+    expect(homeHtml).toContain('When to Replace vs Repair Your HVAC');
     expect(homeHtml).not.toContain('Homewyse');
     expect(homeHtml).toContain('/images/fig-01-decision-matrix.svg');
     expect(fs.existsSync(path.join(distDir, 'images/fig-01-decision-matrix.svg'))).toBe(true);
 
+    const guidesHubHtml = fs.readFileSync(path.join(distDir, 'guides/index.html'), 'utf-8');
+    expect((guidesHubHtml.match(/<h2[\s>]/g) ?? []).length).toBeGreaterThanOrEqual(6);
+    const guidesHubMain = guidesHubHtml.match(/<main[^>]*>([\s\S]*?)<\/main>/i)![1]!
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&[a-z0-9#]+;/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const guidesHubWords = guidesHubMain.split(' ').filter(Boolean).length;
+    expect(guidesHubWords).toBeGreaterThanOrEqual(600);
+    expect(guidesHubWords).toBeLessThanOrEqual(850);
+
     const contactHtml = fs.readFileSync(path.join(distDir, 'contact/index.html'), 'utf-8');
     expect(contactHtml).toContain('mailto:mayday0064@gmail.com');
+    expect(contactHtml).toContain('3 business days');
+    expect(contactHtml).toContain('deleted immediately');
     expect(contactHtml).not.toContain('<form');
+
+    const aboutHtml = fs.readFileSync(path.join(distDir, 'about/index.html'), 'utf-8');
+    expect(aboutHtml).toContain('Primary Sources');
+    for (const domain of ['ecfr.gov', 'epa.gov', 'energystar.gov', 'dsireusa.org', 'irs.gov']) {
+      expect(aboutHtml).toContain(domain);
+    }
 
     const privacyHtml = fs.readFileSync(path.join(distDir, 'privacy/index.html'), 'utf-8');
     expect(privacyHtml).toContain('Effective Date:');

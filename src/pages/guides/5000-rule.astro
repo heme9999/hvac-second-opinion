@@ -1,5 +1,5 @@
 ---
-import { OFFICIAL_SOURCES } from '../../config/site';
+import { OFFICIAL_SOURCES, SITE } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -45,6 +45,9 @@ const faqSchema = {
 
   <article class="prose">
     <h1>The $5,000 Rule and the 50% Rule Explained</h1>
+    <p class="guide-meta">
+      Last updated: <time datetime={SITE.lastUpdated}>November 24, 2026</time> · Checked against primary federal sources
+    </p>
     <p class="intro-lead">
       Nearly every homeowner weighing a large HVAC invoice runs into two shortcuts: the <strong>$5,000 rule</strong> and the <strong>50% rule</strong>. Both take five seconds to compute, making them quick warning lights—but treating either shortcut as an automatic verdict can cost thousands of dollars.
     </p>
@@ -147,7 +150,7 @@ const faqSchema = {
 
     <h2>Run All Four Checks on Your Own Quote</h2>
     <p>
-      Enter your exact repair quote, installed replacement bid, age, refrigerant, and stay horizon in the <a href="/">calculator</a> to inspect the exact dollar flip condition.
+      Enter your exact repair quote, installed replacement bid, age, refrigerant, and stay horizon in the <a href="/">calculator</a> to inspect the exact dollar flip condition—or <a href="/#rep=2800&repl=10800&age=15&ref=r22&stay=8&frep=600&esav=350">load Worked Example 2 (15-yr R-22 $2,800 vs. $10,800) directly in the worksheet</a>.
     </p>
   </article>
 </BaseLayout>

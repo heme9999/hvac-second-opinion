@@ -80,6 +80,12 @@ export function renderCalculationResult(
            </div>`
         : '';
 
+      const horizonNoteMobileHtml = result.horizonAgeNote
+        ? `<div class="stay-callout" role="note" style="margin-bottom: 0.75rem;">
+             <strong>End-of-Stay Age Horizon:</strong> ${escapeHtml(result.horizonAgeNote)}
+           </div>`
+        : '';
+
       mobileDrawerBodyEl.innerHTML = `
         <div class="totals-compare" style="margin-bottom: 0.75rem;">
           <div class="total-cell">
@@ -96,6 +102,7 @@ export function renderCalculationResult(
           </div>
         </div>
         ${ageNoteMobileHtml}
+        ${horizonNoteMobileHtml}
         <p class="field-note" style="margin-bottom: 0.75rem;">${escapeHtml(result.firedChecksSummary)}</p>
         <div class="mobile-checks-list">${mobileChecksHtml}</div>
         <p class="field-note" style="margin-top: 0.75rem;">${escapeHtml(result.flipExplanation)}</p>
@@ -198,6 +205,18 @@ export function renderCalculationResult(
        </div>`
     : '';
 
+  const horizonNoteHtml = result.horizonAgeNote
+    ? `<div class="stay-callout" role="note">
+         <strong>End-of-Stay Age Horizon:</strong> ${escapeHtml(result.horizonAgeNote)}
+       </div>`
+    : '';
+
+  const estimateDisclosureHtml = result.checkDEstimateNote
+    ? `<div class="estimate-disclosure" role="note">
+         <strong>Check D Estimate Disclosure:</strong> ${escapeHtml(result.checkDEstimateNote)}
+       </div>`
+    : '';
+
   worksheetEl.innerHTML = `
     <div class="sheet-header">
       <div>
@@ -212,6 +231,8 @@ export function renderCalculationResult(
 
     ${ageNoteHtml}
     ${stayNoteHtml}
+    ${horizonNoteHtml}
+    ${estimateDisclosureHtml}
 
     <div class="totals-compare" aria-label="Holding cost comparison">
       <div class="total-cell">

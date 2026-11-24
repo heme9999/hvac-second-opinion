@@ -8,12 +8,22 @@ export interface CalculatorInputs {
   stayYears: number;
   futureAnnualRepairCost: number;
   annualEnergySavings: number;
+  usingEstimatedFutureRepair?: boolean;
+  usingEstimatedEnergySavings?: boolean;
+}
+
+export interface ScenarioEstimates {
+  futureAnnualRepairCost: number;
+  annualEnergySavings: number;
+  repairBasis: string;
+  energyBasis: string;
 }
 
 export type CheckOutcome = 'replace' | 'repair' | 'tie';
 
 export interface CheckResult {
   id: 'A' | 'B' | 'C' | 'D';
+  shortName: string;
   title: string;
   fired: boolean;
   favors: CheckOutcome;
@@ -35,6 +45,8 @@ export interface CalculationResult {
   flipPerYearDollars: number | null;
   flipExplanation: string;
   stayHorizonNote: string | null;
+  horizonAgeNote: string | null;
+  checkDEstimateNote: string | null;
   ageWarningNote: string | null;
   isShortStay: boolean;
   checks: readonly CheckResult[];

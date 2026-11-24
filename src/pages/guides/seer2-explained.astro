@@ -1,5 +1,5 @@
 ---
-import { OFFICIAL_SOURCES } from '../../config/site';
+import { OFFICIAL_SOURCES, SITE } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -45,6 +45,9 @@ const faqSchema = {
 
   <article class="prose">
     <h1>SEER2 Explained: What Efficiency Ratings Actually Save You</h1>
+    <p class="guide-meta">
+      Last updated: <time datetime={SITE.lastUpdated}>November 24, 2026</time> · Checked against primary federal sources
+    </p>
     <p class="intro-lead">
       Contractors frequently justify a $3,000 higher bid by promising your power bill will drop in half. Before paying extra for top-tier SEER2 badges—or counting utility savings inside our <a href="/">calculator</a>—check the federal rules and real kilowatt-hour math below.
     </p>

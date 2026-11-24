@@ -1,4 +1,4 @@
-import { calculateSecondOpinion } from '../engine/calculate';
+import { calculateSecondOpinion, getScenarioEstimates } from '../engine/calculate';
 import type { CalculatorInputs, RefrigerantType } from '../engine/types';
 import { renderCalculationResult } from './render';
 import { decodeShareFragment, encodeShareFragment } from './shareLink';
@@ -59,6 +59,9 @@ export function readCalculatorInputs(form: HTMLFormElement): CalculatorInputs {
   const stayRaw = getInt('stay-years');
   const stayYears = stayRaw !== null ? Math.min(20, Math.max(1, stayRaw)) : 5;
 
+  const futureRepairBadge = document.getElementById('future-repair-badge');
+  const energySavingsBadge = document.getElementById('energy-savings-badge');
+
   return {
     repairQuote: getDollar('repair-quote'),
     replacementQuote: getDollar('replacement-quote'),
@@ -67,6 +70,8 @@ export function readCalculatorInputs(form: HTMLFormElement): CalculatorInputs {
     stayYears,
     futureAnnualRepairCost: getDollar('future-annual-repair') ?? 0,
     annualEnergySavings: getDollar('annual-energy-savings') ?? 0,
+    usingEstimatedFutureRepair: futureRepairBadge ? !futureRepairBadge.hidden : false,
+    usingEstimatedEnergySavings: energySavingsBadge ? !energySavingsBadge.hidden : false,
   };
 }
 
@@ -111,8 +116,58 @@ export function initCalculatorApp(): void {
   const copyBtn = document.getElementById('copy-link-btn');
   const copyStatus = document.getElementById('copy-link-status');
   const clearBtn = document.getElementById('clear-form-btn');
+  const applyEstimatesBtn = document.getElementById('apply-estimates-btn');
+  const zeroEstimatesBtn = document.getElementById('zero-estimates-btn');
+  const frepBadge = document.getElementById('future-repair-badge');
+  const esavBadge = document.getElementById('energy-savings-badge');
+  const frepHint = document.getElementById('future-repair-hint');
+  const esavHint = document.getElementById('energy-savings-hint');
 
   if (!form || !worksheetEl) return;
+
+  const ageInput = form.querySelector<HTMLInputElement>('#system-age');
+  const frepInput = form.querySelector<HTMLInputElement>('#future-annual-repair');
+  const esavInput = form.querySelector<HTMLInputElement>('#annual-energy-savings');
+
+  const DEFAULT_FREP_HINT =
+    'Editable planning estimate based on age once entered (or leave at $0 if unsure; not a guaranteed fact).';
+  const DEFAULT_ESAV_HINT =
+    'Editable SEER2 kWh scenario estimate based on age once entered, or reset to $0 unless you verify utility bills.';
+
+  const manualOverrides = {
+    futureAnnualRepairCost: false,
+    annualEnergySavings: false,
+  };
+
+  const setEstimateVisual = (
+    field: 'futureAnnualRepairCost' | 'annualEnergySavings',
+    active: boolean,
+    basis?: string,
+  ) => {
+    if (field === 'futureAnnualRepairCost') {
+      if (frepBadge) frepBadge.hidden = !active;
+      if (frepHint) frepHint.textContent = active && basis ? `${basis} (editable estimate).` : DEFAULT_FREP_HINT;
+    } else {
+      if (esavBadge) esavBadge.hidden = !active;
+      if (esavHint) esavHint.textContent = active && basis ? `${basis} (editable estimate).` : DEFAULT_ESAV_HINT;
+    }
+  };
+
+  const syncAgeScenarioEstimates = (force = false) => {
+    if (!ageInput || ageInput.value.trim() === '') return;
+    const rawAge = Number(ageInput.value);
+    if (!Number.isFinite(rawAge) || rawAge < 0 || rawAge > 60) return;
+
+    const est = getScenarioEstimates(rawAge);
+    if ((force || !manualOverrides.futureAnnualRepairCost) && frepInput) {
+      frepInput.value = est.futureAnnualRepairCost.toLocaleString('en-US');
+      setEstimateVisual('futureAnnualRepairCost', true, est.repairBasis);
+    }
+    if ((force || !manualOverrides.annualEnergySavings) && esavInput) {
+      esavInput.value = est.annualEnergySavings.toLocaleString('en-US');
+      setEstimateVisual('annualEnergySavings', true, est.energyBasis);
+    }
+  };
 
   const validateAll = initFormValidation(form);
 
@@ -120,6 +175,10 @@ export function initCalculatorApp(): void {
     const decoded = decodeShareFragment(window.location.hash);
     if (decoded) {
       applyInputsToForm(form, decoded);
+      manualOverrides.futureAnnualRepairCost = true;
+      manualOverrides.annualEnergySavings = true;
+      setEstimateVisual('futureAnnualRepairCost', false);
+      setEstimateVisual('annualEnergySavings', false);
     }
   }
 
@@ -140,6 +199,37 @@ export function initCalculatorApp(): void {
     timer = setTimeout(runUpdate, 50);
   };
 
+  ageInput?.addEventListener('input', () => {
+    syncAgeScenarioEstimates(false);
+  });
+
+  frepInput?.addEventListener('input', () => {
+    manualOverrides.futureAnnualRepairCost = true;
+    setEstimateVisual('futureAnnualRepairCost', false);
+  });
+
+  esavInput?.addEventListener('input', () => {
+    manualOverrides.annualEnergySavings = true;
+    setEstimateVisual('annualEnergySavings', false);
+  });
+
+  applyEstimatesBtn?.addEventListener('click', () => {
+    manualOverrides.futureAnnualRepairCost = false;
+    manualOverrides.annualEnergySavings = false;
+    syncAgeScenarioEstimates(true);
+    runUpdate();
+  });
+
+  zeroEstimatesBtn?.addEventListener('click', () => {
+    manualOverrides.futureAnnualRepairCost = true;
+    manualOverrides.annualEnergySavings = true;
+    if (frepInput) frepInput.value = '0';
+    if (esavInput) esavInput.value = '0';
+    setEstimateVisual('futureAnnualRepairCost', false);
+    setEstimateVisual('annualEnergySavings', false);
+    runUpdate();
+  });
+
   form.addEventListener('input', scheduleUpdate);
   form.addEventListener('change', scheduleUpdate);
   form.addEventListener('submit', (e) => {
@@ -154,6 +244,10 @@ export function initCalculatorApp(): void {
     btn.addEventListener('click', () => {
       const key = btn.dataset.sample as keyof typeof SAMPLE_SCENARIOS | undefined;
       if (!key || !SAMPLE_SCENARIOS[key]) return;
+      manualOverrides.futureAnnualRepairCost = true;
+      manualOverrides.annualEnergySavings = true;
+      setEstimateVisual('futureAnnualRepairCost', false);
+      setEstimateVisual('annualEnergySavings', false);
       applyInputsToForm(form, SAMPLE_SCENARIOS[key]);
       runUpdate();
     });
@@ -162,15 +256,17 @@ export function initCalculatorApp(): void {
   // Clear button
   clearBtn?.addEventListener('click', () => {
     form.reset();
+    manualOverrides.futureAnnualRepairCost = false;
+    manualOverrides.annualEnergySavings = false;
+    setEstimateVisual('futureAnnualRepairCost', false);
+    setEstimateVisual('annualEnergySavings', false);
     form.querySelectorAll<HTMLInputElement>('input[type="text"], input[type="number"]').forEach((el) => {
       el.classList.remove('user-invalid-fallback');
       el.setAttribute('aria-invalid', 'false');
     });
     const stayInput = form.querySelector<HTMLInputElement>('#stay-years');
     if (stayInput) stayInput.value = '5';
-    const frepInput = form.querySelector<HTMLInputElement>('#future-annual-repair');
     if (frepInput) frepInput.value = '0';
-    const esavInput = form.querySelector<HTMLInputElement>('#annual-energy-savings');
     if (esavInput) esavInput.value = '0';
     runUpdate();
   });

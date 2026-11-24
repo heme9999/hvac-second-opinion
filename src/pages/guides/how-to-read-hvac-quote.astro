@@ -1,5 +1,5 @@
 ---
-import { OFFICIAL_SOURCES } from '../../config/site';
+import { OFFICIAL_SOURCES, SITE } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -45,6 +45,9 @@ const faqSchema = {
 
   <article class="prose">
     <h1>How to Read an HVAC Quote</h1>
+    <p class="guide-meta">
+      Last updated: <time datetime={SITE.lastUpdated}>November 24, 2026</time> · Checked against primary federal sources
+    </p>
     <p class="intro-lead">
       Two HVAC contractors can price the exact same 3-ton heat pump <strong>$1,500 apart ($7,900 vs. $9,400)</strong> while delivering wildly different scopes of work. One quote covers city mechanical permits, a fresh copper line set, and proper EPA recovery; the other is a vague total that triggers $1,700 in change orders once your old condenser sits in the driveway.
     </p>

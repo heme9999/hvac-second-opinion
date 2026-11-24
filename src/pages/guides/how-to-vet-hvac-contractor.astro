@@ -1,5 +1,5 @@
 ---
-import { OFFICIAL_SOURCES } from '../../config/site';
+import { OFFICIAL_SOURCES, SITE } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -45,6 +45,9 @@ const faqSchema = {
 
   <article class="prose">
     <h1>How to Vet an HVAC Contractor Before You Sign</h1>
+    <p class="guide-meta">
+      Last updated: <time datetime={SITE.lastUpdated}>November 24, 2026</time> · Checked against primary federal sources
+    </p>
     <p class="intro-lead">
       Installation quality determines system lifespan just as much as the brand badge outside. A top-tier unit bolted onto leaking ducts without an ACCA load calculation or nitrogen purge will fail early—while a code-minimum <a href="/guides/seer2-explained/">SEER2 system</a> installed by a thorough crew runs cleanly for 15+ years.
     </p>

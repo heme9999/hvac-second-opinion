@@ -1,5 +1,5 @@
 ---
-import { OFFICIAL_SOURCES } from '../../config/site';
+import { OFFICIAL_SOURCES, SITE } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -45,6 +45,9 @@ const faqSchema = {
 
   <article class="prose">
     <h1>Signs Your HVAC System Is Dying vs. Worth One More Repair</h1>
+    <p class="guide-meta">
+      Last updated: <time datetime={SITE.lastUpdated}>November 24, 2026</time> · Checked against primary federal sources
+    </p>
     <p class="intro-lead">
       A breakdown during peak summer or freezing winter does not automatically require a $10,000 system replacement. Many sudden shutdowns stem from $200–$500 electrical or sensor wear items, while a smaller group indicate safety risks or true end-of-life failures.
     </p>

@@ -1,5 +1,4 @@
 ---
-import { GUIDES } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
@@ -13,18 +12,83 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
   <h1>HVAC Quote &amp; Repair Field Guides</h1>
   <p class="intro-lead">
-    Every guide below includes worked homeowner arithmetic and verified federal references from the U.S. EPA, Department of Energy (DOE), ENERGY STAR, and the IRS.
+    These six field guides explain every rule, federal cutoff, and quote line item behind our <a href="/">HVAC Repair or Replace Calculator</a>. Every figure is traced to a named source from the U.S. EPA, Department of Energy (DOE), ENERGY STAR, IRS, or DSIRE—never scraped pricing averages or contractor lead funnels.
   </p>
 
-  <div class="guides-grid">
-    {GUIDES.map((guide) => (
-      <a class="guide-link-row" href={guide.href}>
-        <span class="guide-badge">{guide.badge}</span>
-        <div class="guide-link-title">{guide.title}</div>
-        <p class="field-note" style="margin-bottom: 0;">{guide.summary}</p>
-      </a>
-    ))}
-  </div>
+  <section class="source-callout" aria-label="How to use these guides">
+    <p style="margin-bottom: 0.5rem;">
+      <strong>How to use this manual:</strong> Start with the <strong>$5,000 Rule</strong> or <strong>R-22 Phase-Out</strong> guide if you are staring at a repair bill right now. If you already have replacement quotes in hand, read <strong>How to Read an HVAC Quote</strong> and <strong>How to Vet a Contractor</strong> before comparing bids side by side.
+    </p>
+    <p class="field-note" style="margin-bottom: 0;">
+      Each guide ends with worked arithmetic you can load straight into the calculator using pre-filled URL links, plus three frequently asked homeowner questions.
+    </p>
+  </section>
+
+  <article class="guide-hub-item">
+    <span class="guide-badge">GUIDE 01 · QUOTE AUDIT</span>
+    <h2><a href="/guides/how-to-read-hvac-quote/">How to Read an HVAC Quote: Line Items, Missing Scope &amp; Red Flags</a></h2>
+    <p>
+      Why does a $7,900 quick bid often wind up costing $9,600 once work starts? This guide walks through the six items every trustworthy replacement manifest needs—including exact condenser and coil model numbers, AHRI Certified Reference Numbers, refrigerant type, and milestone payment terms.
+    </p>
+    <p style="margin-bottom: 0;">
+      It also documents the five items most often omitted from low lump-sum quotes—municipal permits, EPA Section 608 refrigerant recovery, copper line sets, multi-conductor thermostat wire, and sheet-metal plenum transitions—with exact wording to demand in writing. <a href="/guides/how-to-read-hvac-quote/">Read Guide 01 →</a>
+    </p>
+  </article>
+
+  <article class="guide-hub-item">
+    <span class="guide-badge">GUIDE 02 · PRIORITY RULE CHECK</span>
+    <h2><a href="/guides/5000-rule/">The $5,000 Rule and 50% Rule Explained: Where Rules of Thumb Break</a></h2>
+    <p>
+      Multiplying unit age by repair cost ($5,000 rule) and dividing repair cost by replacement cost (50% rule) are fast smoke alarms, not verdicts. Higher post-2023 DOE SEER2 installation prices routinely trip the $5,000 line on minor repairs for 10-year-old R-410A systems, while short homeowner stays (1–2 years) can override both ratios cleanly.
+    </p>
+    <p style="margin-bottom: 0;">
+      Includes worked examples comparing Check A, Check B, Check C, and multi-year Check D holding costs, plus the yearly break-even flip formula. <a href="/guides/5000-rule/">Read Guide 02 →</a> · <a href="/#rep=2800&repl=10800&age=15&ref=r22&stay=8&frep=600&esav=350">Open the 15-yr R-22 $2,800 vs. $10,800 scenario in the calculator →</a>
+    </p>
+  </article>
+
+  <article class="guide-hub-item">
+    <span class="guide-badge">GUIDE 03 · PRIORITY REGULATORY FLAG</span>
+    <h2><a href="/guides/r22-refrigerant/">R-22 Refrigerant Phase-Out: What It Means for Older AC Systems</a></h2>
+    <p>
+      New R-22 equipment was banned in 2010 and virgin R-22 production and import ended completely on January 1, 2020 under U.S. EPA rules. Surviving R-22 air conditioners rely exclusively on scarce reclaimed cylinders, turning coil leaks on units older than 12 years into repeated sunk costs.
+    </p>
+    <p style="margin-bottom: 0;">
+      Learn how to inspect your outdoor condenser nameplate, distinguish completed R-22 bans from the gradual AIM Act R-410A phasedown toward R-454B and R-32, and check copper line-set oil compatibility before replacing. <a href="/guides/r22-refrigerant/">Read Guide 03 →</a> · <a href="/#rep=2450&repl=9600&age=16&ref=r22&stay=6&frep=400&esav=150">Test the 16-yr R-22 coil leak scenario in the calculator →</a>
+    </p>
+  </article>
+
+  <article class="guide-hub-item">
+    <span class="guide-badge">GUIDE 04 · EFFICIENCY &amp; INCENTIVES</span>
+    <h2><a href="/guides/seer2-explained/">SEER2 Explained: DOE Minimums, Real Bill Savings &amp; 2026 Rebates</a></h2>
+    <p>
+      Covers DOE 10 CFR 430.32 regional minimums effective January 1, 2023 (13.4 SEER2 North; 14.3 / 13.8 SEER2 Southeast and Southwest; 14.3 SEER2 / 7.5 HSPF2 heat pumps nationwide), ENERGY STAR Version 6.1 heat pump benchmarks (15.2 SEER2 / 7.8 HSPF2), and why SEER2 ≈ SEER × 0.95.
+    </p>
+    <p style="margin-bottom: 0;">
+      Includes a 2026 rebate comparison table clarifying that IRS Section 25C expired after December 31, 2025, pointing homeowners to DSIRE, and showing how to calculate realistic cooling kWh savings from summer utility bills. <a href="/guides/seer2-explained/">Read Guide 04 →</a>
+    </p>
+  </article>
+
+  <article class="guide-hub-item">
+    <span class="guide-badge">GUIDE 05 · SIZING &amp; CREDENTIALS</span>
+    <h2><a href="/guides/how-to-vet-hvac-contractor/">How to Vet an HVAC Contractor: Licenses, Manual J &amp; Written Bids</a></h2>
+    <p>
+      Walks through verifying active state mechanical licensing, liability and workers’ compensation coverage, EPA Section 608 refrigerant certification, and demanding a room-by-room ACCA Manual J load calculation (plus Manual S and Manual D) instead of square-footage guessing.
+    </p>
+    <p style="margin-bottom: 0;">
+      Includes a three-bid comparison ($8,400 oversized vs. $9,900 Manual J match vs. $13,600 variable upsell) and three concrete questions to bring to every technician visit. <a href="/guides/how-to-vet-hvac-contractor/">Read Guide 05 →</a>
+    </p>
+  </article>
+
+  <article class="guide-hub-item">
+    <span class="guide-badge">GUIDE 06 · SYMPTOM TRIAGE</span>
+    <h2><a href="/guides/signs-your-hvac-is-dying/">Signs Your HVAC System Is Dying vs. Worth One More Repair</a></h2>
+    <p>
+      Separates immediate safety shutdown hazards (cracked heat exchangers, CO alarms, scorched wiring, gas leaks) and end-of-life failures (out-of-warranty compressors, major R-22 coil leaks) from routine electrical wear parts like dual run capacitors, contactors, float switches, and flame sensors.
+    </p>
+    <p style="margin-bottom: 0;">
+      Features two complete seven-input homeowner scenarios you can audit directly in the calculator, plus on-site field measurements to ask your technician to show you. <a href="/guides/signs-your-hvac-is-dying/">Read Guide 06 →</a>
+    </p>
+  </article>
 
   <div style="margin-top: 2rem;">
     <a class="btn btn-primary" href="/">Return to Calculator →</a>

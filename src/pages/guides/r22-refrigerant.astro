@@ -1,5 +1,5 @@
 ---
-import { OFFICIAL_SOURCES } from '../../config/site';
+import { OFFICIAL_SOURCES, SITE } from '../../config/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const FAQ_ITEMS = [
@@ -45,6 +45,9 @@ const faqSchema = {
 
   <article class="prose">
     <h1>What the R-22 Phase-Out Means for Your Old HVAC System</h1>
+    <p class="guide-meta">
+      Last updated: <time datetime={SITE.lastUpdated}>November 24, 2026</time> · Checked against primary federal sources
+    </p>
     <p class="intro-lead">
       When a technician checks your outdoor condenser nameplate and sees <strong>R-22</strong> (legacy HCFC-22, often branded Freon), repair-vs-replace math shifts sharply. That is why our calculator runs a dedicated hard flag whenever a system exceeds 12 years old and uses R-22.
     </p>
@@ -140,7 +143,7 @@ const faqSchema = {
 
     <h2>Run Your Exact Quotes</h2>
     <p>
-      Test your unit’s age, refrigerant stamp, and stay horizon in our <a href="/">HVAC Repair or Replace Calculator</a>—especially if you plan to move within 1–2 years, when Check D holding costs can shift a non-leak repair toward Borderline.
+      Test your unit’s age, refrigerant stamp, and stay horizon in our <a href="/">HVAC Repair or Replace Calculator</a> (or <a href="/#rep=2450&repl=9600&age=16&ref=r22&stay=6&frep=400&esav=150">load the 16-year R-22 coil leak example pre-filled</a>)—especially if you plan to move within 1–2 years, when Check D holding costs can shift a non-leak repair toward Borderline.
     </p>
   </article>
 </BaseLayout>

@@ -4,7 +4,7 @@ export const SITE = {
   url: 'https://hvac-second-opinion.pages.dev',
   email: 'mayday0064@gmail.com',
   author: 'Peter',
-  lastUpdated: '2026-11-14',
+  lastUpdated: '2026-11-24',
   googleSiteVerification: 'wMz2VDeMwD8R6yiCgJIqFD_wM2wSzrSEauzvCtzKHyw',
   disclaimer:
     'Estimates only, not a professional diagnosis. Gas, electrical and carbon-monoxide safety decisions need a licensed pro. Prices vary by region and install complexity.',

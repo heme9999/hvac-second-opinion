@@ -33,6 +33,54 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <li><strong>Estimates, not professional diagnoses:</strong> All calculator outputs are financial comparison estimates only. Gas, electrical, combustion, and carbon-monoxide safety decisions always require an on-site inspection by a licensed professional.</li>
     </ul>
 
+    <h2>Primary Sources &amp; Reference Directory</h2>
+    <p>
+      Every regulatory date, efficiency minimum, and incentive status on this site traces directly back to the six primary agency documents below rather than contractor sales sheets or recycled blogs:
+    </p>
+    <div tabindex="0" role="region" aria-label="Primary federal and incentive sources" class="table-wrapper">
+      <table class="estimate-table">
+        <thead>
+          <tr>
+            <th>Agency / Database</th>
+            <th>What This Source Verifies</th>
+            <th>Reference Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">U.S. Department of Energy (DOE)</th>
+            <td>January 1, 2023 regional SEER2 and HSPF2 minimum efficiency standards (North 13.4 SEER2; SE/SW 14.3 / 13.8 SEER2; heat pumps 14.3 SEER2 / 7.5 HSPF2).</td>
+            <td><a href={OFFICIAL_SOURCES.doeSeer2} target="_blank" rel="noopener noreferrer">10 CFR 430.32</a></td>
+          </tr>
+          <tr>
+            <th scope="row">U.S. EPA (ODS Phaseout)</th>
+            <td>2010 ban on new R-22 equipment, January 1, 2020 ban on R-22 production and import, and reclaimed-only servicing rules.</td>
+            <td><a href={OFFICIAL_SOURCES.epaR22} target="_blank" rel="noopener noreferrer">EPA Class II ODS Phaseout</a></td>
+          </tr>
+          <tr>
+            <th scope="row">U.S. EPA (AIM Act)</th>
+            <td>National HFC phasedown schedule shifting new residential air conditioners and heat pumps from R-410A toward R-454B and R-32.</td>
+            <td><a href={OFFICIAL_SOURCES.epaAim} target="_blank" rel="noopener noreferrer">EPA AIM Act HFC Phasedown</a></td>
+          </tr>
+          <tr>
+            <th scope="row">ENERGY STAR (v6.1)</th>
+            <td>Heat pump certification criteria (15.2 SEER2 / 7.8 HSPF2) commonly required by local electric utility rebate programs.</td>
+            <td><a href={OFFICIAL_SOURCES.energyStar} target="_blank" rel="noopener noreferrer">ENERGY STAR Heat Pump Criteria</a></td>
+          </tr>
+          <tr>
+            <th scope="row">Internal Revenue Service (IRS)</th>
+            <td>Confirmation that Section 25C credits applied to systems placed in service through December 31, 2025 and expired for 2026 installs.</td>
+            <td><a href={OFFICIAL_SOURCES.irs25c} target="_blank" rel="noopener noreferrer">IRS Section 25C Credit</a></td>
+          </tr>
+          <tr>
+            <th scope="row">DSIRE Database</th>
+            <td>Active state energy office programs and local electric utility HVAC/heat-pump rebates searchable by ZIP code.</td>
+            <td><a href={OFFICIAL_SOURCES.dsire} target="_blank" rel="noopener noreferrer">DSIRE Incentives Portal</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div style="margin-top: 2rem;">
       <a class="btn btn-primary" href="/">Open the Calculator →</a>
     </div>
