@@ -1,7 +1,7 @@
 export const SITE = {
   name: 'HVAC Second Opinion',
   shortName: 'HVAC Second Opinion',
-  url: 'https://hvac-second-opinion.pages.dev',
+  url: 'https://hvac-second-opinion.com',
   email: 'mayday0064@gmail.com',
   author: 'Peter',
   lastUpdated: '2026-11-24',

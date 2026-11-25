@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://hvac-second-opinion.pages.dev',
+  site: 'https://hvac-second-opinion.com',
   trailingSlash: 'always',
   build: {
     format: 'directory',

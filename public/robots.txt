@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hvac-second-opinion.pages.dev/sitemap.xml
+Sitemap: https://hvac-second-opinion.com/sitemap.xml

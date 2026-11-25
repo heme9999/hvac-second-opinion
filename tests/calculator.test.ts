@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { onRequest } from '../functions/_middleware';
 import { calculateSecondOpinion, getScenarioEstimates } from '../src/engine/calculate';
 import { decodeShareFragment, encodeShareFragment } from '../src/ui/shareLink';
 
@@ -379,5 +380,98 @@ describe('Content, SEO, and design constraints on built dist/', () => {
       expect(nonZeroRadius).toBe(false);
       expect(css).toMatch(/\.estimate-tag\[hidden\]\s*\{[^}]*display\s*:\s*none/i);
     }
+  });
+});
+
+describe('Custom-domain migration middleware and dist/ host assertions', () => {
+  const distDir = path.resolve(process.cwd(), 'dist');
+
+  it('301-redirects apex pages.dev and www.hvac-second-opinion.com to https://hvac-second-opinion.com preserving path and query', async () => {
+    const nextOk = async () => new Response('ok', { status: 200 });
+
+    const pagesRes = await onRequest({
+      request: new Request('https://hvac-second-opinion.pages.dev/guides/5000-rule/?utm=test'),
+      next: nextOk,
+    });
+    expect(pagesRes.status).toBe(301);
+    expect(pagesRes.headers.get('location')).toBe(
+      'https://hvac-second-opinion.com/guides/5000-rule/?utm=test',
+    );
+
+    const wwwRes = await onRequest({
+      request: new Request('https://www.hvac-second-opinion.com/x/'),
+      next: nextOk,
+    });
+    expect(wwwRes.status).toBe(301);
+    expect(wwwRes.headers.get('location')).toBe('https://hvac-second-opinion.com/x/');
+  });
+
+  it('adds X-Robots-Tag: noindex, nofollow on *.hvac-second-opinion.pages.dev preview deployments and leaves apex .com clean', async () => {
+    const nextOk = async () => new Response('ok', { status: 200 });
+
+    const previewRes = await onRequest({
+      request: new Request('https://2e2ee47f.hvac-second-opinion.pages.dev/'),
+      next: nextOk,
+    });
+    expect(previewRes.status).toBe(200);
+    expect(previewRes.headers.get('X-Robots-Tag')).toBe('noindex, nofollow');
+
+    const apexRes = await onRequest({
+      request: new Request('https://hvac-second-opinion.com/'),
+      next: nextOk,
+    });
+    expect(apexRes.status).toBe(200);
+    expect(apexRes.headers.get('X-Robots-Tag')).toBeNull();
+  });
+
+  it('contains zero pages.dev references across built dist/, 11 .com sitemap URLs, and canonical tags pointing to .com', () => {
+    const filesToCheck: string[] = ['sitemap.xml', 'robots.txt', '404.html'];
+    const indexablePages = [
+      'index.html',
+      'guides/index.html',
+      'guides/how-to-read-hvac-quote/index.html',
+      'guides/5000-rule/index.html',
+      'guides/r22-refrigerant/index.html',
+      'guides/seer2-explained/index.html',
+      'guides/how-to-vet-hvac-contractor/index.html',
+      'guides/signs-your-hvac-is-dying/index.html',
+      'about/index.html',
+      'privacy/index.html',
+      'contact/index.html',
+    ];
+
+    for (const rel of [...filesToCheck, ...indexablePages]) {
+      const content = fs.readFileSync(path.join(distDir, rel), 'utf-8');
+      expect(content).not.toContain('pages.dev');
+    }
+
+    const sitemap = fs.readFileSync(path.join(distDir, 'sitemap.xml'), 'utf-8');
+    const locs = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]!);
+    expect(locs).toHaveLength(11);
+    for (const loc of locs) {
+      expect(loc.startsWith('https://hvac-second-opinion.com/')).toBe(true);
+    }
+
+    const robots = fs.readFileSync(path.join(distDir, 'robots.txt'), 'utf-8');
+    expect(robots).toContain('Sitemap: https://hvac-second-opinion.com/sitemap.xml');
+
+    const expectedPaths = [
+      'https://hvac-second-opinion.com/',
+      'https://hvac-second-opinion.com/guides/',
+      'https://hvac-second-opinion.com/guides/how-to-read-hvac-quote/',
+      'https://hvac-second-opinion.com/guides/5000-rule/',
+      'https://hvac-second-opinion.com/guides/r22-refrigerant/',
+      'https://hvac-second-opinion.com/guides/seer2-explained/',
+      'https://hvac-second-opinion.com/guides/how-to-vet-hvac-contractor/',
+      'https://hvac-second-opinion.com/guides/signs-your-hvac-is-dying/',
+      'https://hvac-second-opinion.com/about/',
+      'https://hvac-second-opinion.com/privacy/',
+      'https://hvac-second-opinion.com/contact/',
+    ];
+
+    indexablePages.forEach((rel, i) => {
+      const html = fs.readFileSync(path.join(distDir, rel), 'utf-8');
+      expect(html).toContain(`<link rel="canonical" href="${expectedPaths[i]}">`);
+    });
   });
 });
